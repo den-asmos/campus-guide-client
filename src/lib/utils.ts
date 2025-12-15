@@ -1,0 +1,89 @@
+import type { RequestError } from "@/services/fetcher";
+import type { TimetableLesson } from "@/services/timetable/types";
+import {
+	Course,
+	Faculty,
+	groupsByFacultiesAndCourses,
+	Role,
+	type User,
+} from "@/services/user/types";
+import type { AxiosError } from "axios";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { courseOptions, groupOptions } from "./constants";
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
+}
+
+export const findByValue = <
+	T extends { label: string; value: string | number }
+>(
+	value: string | number,
+	options: T[]
+) => {
+	return options.find((option) => option.value === value)?.label;
+};
+
+export const getErrorMessage = (error: AxiosError) => {
+	const responseData = error.response?.data;
+
+	if (!responseData) {
+		return undefined;
+	}
+
+	return (
+		(responseData as RequestError).error ||
+		(responseData as RequestError).message
+	);
+};
+
+export const filterCourseOptions = (faculty: Faculty | undefined) => {
+	if (faculty === Faculty.ХГФ || faculty === Faculty.ФГЗиК) {
+		return courseOptions;
+	}
+	return courseOptions.filter((option) => option.value !== 5);
+};
+
+export const filterGroupOptions = (
+	faculty: Faculty | undefined,
+	course: Course | undefined
+) => {
+	if (!faculty || !course) {
+		return groupOptions;
+	}
+	return groupOptions.filter((group) =>
+		groupsByFacultiesAndCourses[faculty][course].includes(group.value)
+	);
+};
+
+export const compareLessons = (
+	first: TimetableLesson,
+	second: TimetableLesson
+) => {
+	return (
+		first.number === second.number &&
+		first.classroom === second.classroom &&
+		first.lecturer === second.lecturer &&
+		first.subject === second.subject &&
+		first.type === second.type &&
+		first.time === second.time
+	);
+};
+
+export const getUserLabel = (user: User | undefined): string => {
+	if (!user) {
+		return "";
+	}
+
+	switch (user.role) {
+		case Role.admin:
+			return user.login;
+		case Role.lecturer:
+			return `${user.firstName} ${user.middleName}`.trim();
+		case Role.student:
+			return user.firstName;
+		default:
+			return "";
+	}
+};
