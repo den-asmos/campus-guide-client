@@ -35,6 +35,11 @@ export const mapTimetableDay = (
 			!result[existingLessonIndex].every((item) => compareLessons(item, lesson))
 		) {
 			result[existingLessonIndex].push(lesson);
+		} else {
+			result[existingLessonIndex] = result[existingLessonIndex].map((item) => ({
+				...item,
+				subgroupName: item.subgroupName + `, ${lesson.subgroupName}`,
+			}));
 		}
 	});
 

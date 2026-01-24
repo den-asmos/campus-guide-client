@@ -1,3 +1,4 @@
+import type { Classroom } from "@/services/classroom/types";
 import type { RequestError } from "@/services/fetcher";
 import type { TimetableLesson } from "@/services/timetable/types";
 import {
@@ -17,10 +18,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const findByValue = <
-	T extends { label: string; value: string | number }
+	T extends { label: string; value: string | number },
 >(
 	value: string | number,
-	options: T[]
+	options: T[],
 ) => {
 	return options.find((option) => option.value === value)?.label;
 };
@@ -47,19 +48,19 @@ export const filterCourseOptions = (faculty: Faculty | undefined) => {
 
 export const filterGroupOptions = (
 	faculty: Faculty | undefined,
-	course: Course | undefined
+	course: Course | undefined,
 ) => {
 	if (!faculty || !course) {
 		return groupOptions;
 	}
 	return groupOptions.filter((group) =>
-		groupsByFacultiesAndCourses[faculty][course].includes(group.value)
+		groupsByFacultiesAndCourses[faculty][course].includes(group.value),
 	);
 };
 
 export const compareLessons = (
 	first: TimetableLesson,
-	second: TimetableLesson
+	second: TimetableLesson,
 ) => {
 	return (
 		first.number === second.number &&
@@ -86,4 +87,16 @@ export const getUserLabel = (user: User | undefined): string => {
 		default:
 			return "";
 	}
+};
+
+export const findClassroom = (
+	locationId: string | undefined,
+	classrooms: Classroom[] | undefined,
+) => {
+	if (!locationId || !classrooms) {
+		return;
+	}
+
+	const classroomTitle = locationId.split("location-id-")[1];
+	return classrooms.find((classroom) => classroom.title === classroomTitle);
 };

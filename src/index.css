@@ -123,41 +123,73 @@
 
 @keyframes loader {
 	0% {
-		box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0),
-			0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+		box-shadow:
+			0px 0 rgba(255, 255, 255, 0),
+			0px 0 rgba(255, 255, 255, 0),
+			0px 0 rgba(255, 255, 255, 0),
+			0px 0 rgba(255, 255, 255, 0);
 	}
 	12% {
-		box-shadow: 100px 0 currentColor, 0px 0 rgba(255, 255, 255, 0),
-			0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+		box-shadow:
+			100px 0 currentColor,
+			0px 0 rgba(255, 255, 255, 0),
+			0px 0 rgba(255, 255, 255, 0),
+			0px 0 rgba(255, 255, 255, 0);
 	}
 	25% {
-		box-shadow: 110px 0 currentColor, 100px 0 currentColor,
-			0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+		box-shadow:
+			110px 0 currentColor,
+			100px 0 currentColor,
+			0px 0 rgba(255, 255, 255, 0),
+			0px 0 rgba(255, 255, 255, 0);
 	}
 	36% {
-		box-shadow: 120px 0 currentColor, 110px 0 currentColor, 100px 0 currentColor,
+		box-shadow:
+			120px 0 currentColor,
+			110px 0 currentColor,
+			100px 0 currentColor,
 			0px 0 rgba(255, 255, 255, 0);
 	}
 	50% {
-		box-shadow: 130px 0 currentColor, 120px 0 currentColor, 110px 0 currentColor,
+		box-shadow:
+			130px 0 currentColor,
+			120px 0 currentColor,
+			110px 0 currentColor,
 			100px 0 currentColor;
 	}
 	62% {
-		box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 currentColor,
-			120px 0 currentColor, 110px 0 currentColor;
+		box-shadow:
+			200px 0 rgba(255, 255, 255, 0),
+			130px 0 currentColor,
+			120px 0 currentColor,
+			110px 0 currentColor;
 	}
 	75% {
-		box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
-			130px 0 currentColor, 120px 0 currentColor;
+		box-shadow:
+			200px 0 rgba(255, 255, 255, 0),
+			200px 0 rgba(255, 255, 255, 0),
+			130px 0 currentColor,
+			120px 0 currentColor;
 	}
 	87% {
-		box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
-			200px 0 rgba(255, 255, 255, 0), 130px 0 currentColor;
+		box-shadow:
+			200px 0 rgba(255, 255, 255, 0),
+			200px 0 rgba(255, 255, 255, 0),
+			200px 0 rgba(255, 255, 255, 0),
+			130px 0 currentColor;
 	}
 	100% {
-		box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
-			200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+		box-shadow:
+			200px 0 rgba(255, 255, 255, 0),
+			200px 0 rgba(255, 255, 255, 0),
+			200px 0 rgba(255, 255, 255, 0),
+			200px 0 rgba(255, 255, 255, 0);
 	}
+}
+
+[id^="location-id-"] {
+	pointer-events: bounding-box;
+	cursor: pointer;
 }
 
 @layer base {

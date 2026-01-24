@@ -56,8 +56,6 @@ const Lesson = () => {
 							</p>
 						</div>
 					</div>
-
-					<div className="w-full h-40 bg-gray-200 rounded-md"></div>
 				</div>
 
 				<Bottom>

@@ -37,8 +37,11 @@ export const groupOptions = Object.values(Group).map((group) => ({
 	label: group,
 }));
 
-export type FloorClassroom = {
+export type LocationType = "classroom" | "connector" | "stairs" | "elevator";
+
+export type FloorLocation = {
 	title: string;
+	type: LocationType;
 	coordinates: number[][];
 	pin: {
 		x: number;
@@ -46,10 +49,11 @@ export type FloorClassroom = {
 	};
 };
 
-export const floors: Record<string, FloorClassroom[]> = {
+export const floors: Record<string, FloorLocation[]> = {
 	third: [
 		{
 			title: "301",
+			type: "classroom",
 			coordinates: [
 				[55, 10],
 				[140, 10],
@@ -60,6 +64,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "301-302",
+			type: "connector",
 			coordinates: [
 				[150, 10],
 				[190, 10],
@@ -70,6 +75,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "302",
+			type: "classroom",
 			coordinates: [
 				[200, 10],
 				[285, 10],
@@ -80,6 +86,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "301А",
+			type: "classroom",
 			coordinates: [
 				[55, 130],
 				[140, 130],
@@ -90,6 +97,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "301А-304",
+			type: "connector",
 			coordinates: [
 				[150, 130],
 				[190, 130],
@@ -100,6 +108,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "304",
+			type: "classroom",
 			coordinates: [
 				[200, 130],
 				[285, 130],
@@ -110,6 +119,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "303",
+			type: "classroom",
 			coordinates: [
 				[55, 180],
 				[140, 180],
@@ -120,6 +130,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "303-stairs31",
+			type: "connector",
 			coordinates: [
 				[150, 180],
 				[190, 180],
@@ -130,6 +141,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "stairs31",
+			type: "stairs",
 			coordinates: [
 				[200, 180],
 				[285, 180],
@@ -140,6 +152,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "elevator3",
+			type: "elevator",
 			coordinates: [
 				[55, 300],
 				[140, 300],
@@ -150,6 +163,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "elevator3-306",
+			type: "connector",
 			coordinates: [
 				[150, 250],
 				[190, 250],
@@ -160,6 +174,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "306",
+			type: "classroom",
 			coordinates: [
 				[200, 250],
 				[285, 250],
@@ -170,6 +185,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "305",
+			type: "classroom",
 			coordinates: [
 				[55, 345],
 				[140, 345],
@@ -180,6 +196,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "305-306А",
+			type: "connector",
 			coordinates: [
 				[150, 370],
 				[190, 370],
@@ -190,6 +207,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "306А",
+			type: "classroom",
 			coordinates: [
 				[200, 370],
 				[285, 370],
@@ -200,6 +218,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "305-347",
+			type: "connector",
 			coordinates: [
 				[150, 420],
 				[190, 420],
@@ -210,6 +229,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "347",
+			type: "classroom",
 			coordinates: [
 				[200, 420],
 				[285, 420],
@@ -220,6 +240,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "307",
+			type: "classroom",
 			coordinates: [
 				[55, 465],
 				[140, 465],
@@ -230,6 +251,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "307-308",
+			type: "connector",
 			coordinates: [
 				[150, 465],
 				[190, 465],
@@ -240,6 +262,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "308",
+			type: "classroom",
 			coordinates: [
 				[200, 465],
 				[285, 465],
@@ -250,6 +273,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "309",
+			type: "classroom",
 			coordinates: [
 				[55, 540],
 				[140, 540],
@@ -260,6 +284,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "309-308",
+			type: "connector",
 			coordinates: [
 				[150, 540],
 				[190, 540],
@@ -270,6 +295,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "309-310",
+			type: "connector",
 			coordinates: [
 				[150, 585],
 				[190, 585],
@@ -280,6 +306,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "310",
+			type: "classroom",
 			coordinates: [
 				[200, 585],
 				[285, 585],
@@ -290,6 +317,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "309А",
+			type: "classroom",
 			coordinates: [
 				[55, 660],
 				[140, 660],
@@ -300,6 +328,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "309А-312",
+			type: "connector",
 			coordinates: [
 				[150, 660],
 				[190, 660],
@@ -310,6 +339,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "312",
+			type: "classroom",
 			coordinates: [
 				[200, 660],
 				[285, 660],
@@ -320,6 +350,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "311",
+			type: "classroom",
 			coordinates: [
 				[55, 730],
 				[140, 730],
@@ -330,6 +361,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "311-314",
+			type: "connector",
 			coordinates: [
 				[150, 705],
 				[190, 705],
@@ -340,6 +372,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "314",
+			type: "classroom",
 			coordinates: [
 				[200, 705],
 				[285, 705],
@@ -350,6 +383,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "313",
+			type: "classroom",
 			coordinates: [
 				[55, 780],
 				[140, 780],
@@ -360,6 +394,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "313-wall",
+			type: "connector",
 			coordinates: [
 				[150, 780],
 				[190, 780],
@@ -370,6 +405,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "315",
+			type: "classroom",
 			coordinates: [
 				[55, 900],
 				[140, 900],
@@ -380,6 +416,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "315-wall",
+			type: "connector",
 			coordinates: [
 				[150, 900],
 				[190, 900],
@@ -390,6 +427,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "317",
+			type: "classroom",
 			coordinates: [
 				[55, 950],
 				[140, 950],
@@ -400,6 +438,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "317-316",
+			type: "connector",
 			coordinates: [
 				[150, 950],
 				[190, 950],
@@ -410,6 +449,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "316",
+			type: "classroom",
 			coordinates: [
 				[200, 925],
 				[285, 925],
@@ -420,6 +460,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "317А",
+			type: "classroom",
 			coordinates: [
 				[55, 1020],
 				[140, 1020],
@@ -430,6 +471,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "317А-stairs32",
+			type: "connector",
 			coordinates: [
 				[150, 1020],
 				[190, 1020],
@@ -440,6 +482,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "stairs32",
+			type: "stairs",
 			coordinates: [
 				[200, 1020],
 				[285, 1020],
@@ -450,6 +493,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "319",
+			type: "classroom",
 			coordinates: [
 				[55, 1090],
 				[140, 1090],
@@ -460,6 +504,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "319-346",
+			type: "connector",
 			coordinates: [
 				[150, 1090],
 				[190, 1090],
@@ -470,6 +515,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "346",
+			type: "classroom",
 			coordinates: [
 				[200, 1090],
 				[285, 1090],
@@ -480,6 +526,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "319-345",
+			type: "connector",
 			coordinates: [
 				[150, 1140],
 				[190, 1140],
@@ -490,6 +537,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "345",
+			type: "classroom",
 			coordinates: [
 				[200, 1140],
 				[285, 1140],
@@ -500,6 +548,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "319-318",
+			type: "connector",
 			coordinates: [
 				[150, 1185],
 				[190, 1185],
@@ -510,6 +559,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "318",
+			type: "classroom",
 			coordinates: [
 				[200, 1185],
 				[285, 1185],
@@ -520,6 +570,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "321",
+			type: "classroom",
 			coordinates: [
 				[55, 1210],
 				[140, 1210],
@@ -530,6 +581,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "321-wall",
+			type: "connector",
 			coordinates: [
 				[150, 1230],
 				[190, 1230],
@@ -540,6 +592,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "323",
+			type: "classroom",
 			coordinates: [
 				[55, 1335],
 				[140, 1335],
@@ -550,6 +603,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "323-wall",
+			type: "connector",
 			coordinates: [
 				[150, 1335],
 				[190, 1335],
@@ -560,6 +614,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "325",
+			type: "classroom",
 			coordinates: [
 				[55, 1380],
 				[140, 1380],
@@ -570,6 +625,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "325-320",
+			type: "connector",
 			coordinates: [
 				[150, 1380],
 				[190, 1380],
@@ -580,6 +636,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "320",
+			type: "classroom",
 			coordinates: [
 				[200, 1380],
 				[285, 1380],
@@ -590,6 +647,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "327",
+			type: "classroom",
 			coordinates: [
 				[55, 1430],
 				[140, 1430],
@@ -600,6 +658,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "327-320",
+			type: "connector",
 			coordinates: [
 				[150, 1430],
 				[190, 1430],
@@ -610,6 +669,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "329",
+			type: "classroom",
 			coordinates: [
 				[55, 1475],
 				[140, 1475],
@@ -620,6 +680,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "329-320",
+			type: "connector",
 			coordinates: [
 				[150, 1475],
 				[190, 1475],
@@ -630,6 +691,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "329А",
+			type: "classroom",
 			coordinates: [
 				[55, 1525],
 				[140, 1525],
@@ -640,6 +702,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "329А-322",
+			type: "connector",
 			coordinates: [
 				[150, 1525],
 				[190, 1525],
@@ -650,6 +713,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "322",
+			type: "classroom",
 			coordinates: [
 				[200, 1525],
 				[285, 1525],
@@ -660,6 +724,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "331",
+			type: "classroom",
 			coordinates: [
 				[55, 1595],
 				[140, 1595],
@@ -670,6 +735,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "331-324",
+			type: "connector",
 			coordinates: [
 				[150, 1595],
 				[190, 1595],
@@ -680,6 +746,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "324",
+			type: "classroom",
 			coordinates: [
 				[200, 1595],
 				[285, 1595],
@@ -690,6 +757,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "333",
+			type: "classroom",
 			coordinates: [
 				[55, 1665],
 				[140, 1665],
@@ -700,6 +768,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "333-326",
+			type: "connector",
 			coordinates: [
 				[150, 1645],
 				[190, 1645],
@@ -710,6 +779,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "326",
+			type: "classroom",
 			coordinates: [
 				[200, 1645],
 				[285, 1645],
@@ -720,6 +790,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "335",
+			type: "classroom",
 			coordinates: [
 				[55, 1785],
 				[140, 1785],
@@ -730,6 +801,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "335-328",
+			type: "connector",
 			coordinates: [
 				[150, 1765],
 				[190, 1765],
@@ -740,6 +812,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "328",
+			type: "classroom",
 			coordinates: [
 				[200, 1765],
 				[285, 1765],
@@ -750,6 +823,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "337",
+			type: "classroom",
 			coordinates: [
 				[55, 1835],
 				[140, 1835],
@@ -760,6 +834,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "337-344",
+			type: "connector",
 			coordinates: [
 				[150, 1810],
 				[190, 1810],
@@ -770,6 +845,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "344",
+			type: "classroom",
 			coordinates: [
 				[200, 1810],
 				[285, 1810],
@@ -780,6 +856,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "337-342",
+			type: "connector",
 			coordinates: [
 				[150, 1860],
 				[190, 1860],
@@ -790,6 +867,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "342",
+			type: "classroom",
 			coordinates: [
 				[200, 1860],
 				[285, 1860],
@@ -800,6 +878,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "339",
+			type: "classroom",
 			coordinates: [
 				[55, 1905],
 				[140, 1905],
@@ -810,6 +889,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "339-stairs33",
+			type: "connector",
 			coordinates: [
 				[150, 1905],
 				[190, 1905],
@@ -820,6 +900,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "stairs33",
+			type: "stairs",
 			coordinates: [
 				[200, 1905],
 				[285, 1905],
@@ -830,6 +911,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "341",
+			type: "classroom",
 			coordinates: [
 				[55, 1955],
 				[140, 1955],
@@ -840,6 +922,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "341-330",
+			type: "connector",
 			coordinates: [
 				[150, 1955],
 				[190, 1955],
@@ -850,6 +933,7 @@ export const floors: Record<string, FloorClassroom[]> = {
 		},
 		{
 			title: "330",
+			type: "classroom",
 			coordinates: [
 				[200, 1980],
 				[285, 1980],
