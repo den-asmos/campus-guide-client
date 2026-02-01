@@ -6,12 +6,15 @@ export type DirectionRequest = {
 };
 
 export type DirectionResponse = {
-	nodes: DirectionNode[];
 	path: string[];
+	nodes: DirectionNode[];
+	origin: DirectionNode;
+	destination: DirectionNode;
 };
 
 export type DirectionNode = Classroom & {
 	type: NodeType;
+	points: string;
 };
 
 export enum NodeType {

@@ -1,10 +1,6 @@
-import type { ReactElement } from "react";
+import type { PropsWithChildren } from "react";
 
-type Props = {
-	children: ReactElement | ReactElement[];
-};
-
-const Wrapper = ({ children }: Props) => {
+const Wrapper = ({ children }: PropsWithChildren) => {
 	return <div className="flex flex-col min-h-screen">{children}</div>;
 };
 

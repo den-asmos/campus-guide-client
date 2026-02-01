@@ -1,10 +1,9 @@
 import { cn } from "@/lib/utils";
-import type { ReactElement } from "react";
+import type { PropsWithChildren } from "react";
 
-type Props = {
-	children: ReactElement | ReactElement[];
+type Props = PropsWithChildren<{
 	className?: string;
-};
+}>;
 
 const Layout = ({ children, className }: Props) => {
 	return (

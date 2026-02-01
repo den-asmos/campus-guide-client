@@ -1,6 +1,8 @@
 import { useAuth } from "@/hooks/useAuth";
-import { useMutation } from "@tanstack/react-query";
-import { signIn, signUp } from "../api/auth";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { currentUser, signIn, signUp } from "../api/auth";
+
+export const CURRENT_USER_KEY = "current-user";
 
 export const useSignIn = () => {
 	const { saveToken } = useAuth();
@@ -32,5 +34,13 @@ export const useSignOut = () => {
 			clearToken();
 			window.location.href = "/sign-in";
 		},
+	});
+};
+
+export const useCurrentUser = () => {
+	return useQuery({
+		queryKey: [CURRENT_USER_KEY],
+		queryFn: currentUser,
+		retry: false,
 	});
 };

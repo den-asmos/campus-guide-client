@@ -11,7 +11,7 @@ import { useGreeting } from "@/hooks/useGreeting";
 import { useTimetable } from "@/hooks/useTimetable";
 import { mapTimetableDay } from "@/lib/mappers";
 import { currentDate, currentWeek, isLessonInFuture } from "@/lib/time";
-import { useCurrentUser } from "@/services/user/query/use-user";
+import { useCurrentUser } from "@/services/auth/query/use-auth";
 import { Role } from "@/services/user/types";
 import { Calendar, Menu, Settings } from "lucide-react";
 import { useEffect, useMemo } from "react";

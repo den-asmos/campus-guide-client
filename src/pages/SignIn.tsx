@@ -73,9 +73,18 @@ const SignIn = () => {
 								)}
 							/>
 
-							<Link to="/sign-up" className="text-button-primary text-center">
-								Ещё нет аккаунта?
-							</Link>
+							<div className="flex flex-col space-y-2">
+								<Link to="/sign-up" className="text-button-primary text-center">
+									Ещё нет аккаунта?
+								</Link>
+
+								<Link
+									to="/password-reset/email"
+									className="text-button-primary text-center text-sm"
+								>
+									Забыли пароль?
+								</Link>
+							</div>
 						</div>
 					</FieldGroup>
 

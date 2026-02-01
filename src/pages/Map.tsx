@@ -22,6 +22,7 @@ import { ArrowDownUp, MapPin, Minus, Plus, RouteIcon } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import { toast } from "sonner";
 
 type MapPin = {
 	x: number;
@@ -43,7 +44,6 @@ const Map = () => {
 	const [isDirectionDrawerOpen, setIsDirectionDrawerOpen] = useState(false);
 	const { data: floorClassrooms, isLoading: isFloorClassroomsLoading } =
 		useFloorClassrooms(3);
-	// const { data } = useDirection({ origin: "301", destination: "333" });
 
 	const handleMapClick = useCallback(
 		(event: React.MouseEvent<SVGSVGElement>) => {
@@ -140,8 +140,15 @@ const Map = () => {
 		setDestination(origin);
 	};
 
-	const handleConfirmDirection = () => {
-		console.log(origin, destination);
+	const handleConfirmDirection = async () => {
+		if (!origin || !destination) {
+			toast.error("Не выбрана точка отправления или назначения");
+		} else {
+			navigate({
+				pathname: "/direction",
+				search: `?origin=${origin.title}&destination=${destination.title}`,
+			});
+		}
 		setIsDirectionDrawerOpen(false);
 	};
 
@@ -200,6 +207,7 @@ const Map = () => {
 					minScale={1}
 					maxScale={3}
 					wheel={{ step: 0.2 }}
+					smooth={true}
 					limitToBounds={false}
 				>
 					{({ zoomIn, zoomOut }) => (

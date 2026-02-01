@@ -26,8 +26,8 @@ import {
 	formSchema,
 	type ProfileFormSchema,
 } from "@/schemas/profileFormSchema";
-import { useSignOut } from "@/services/auth/query/use-auth";
-import { useCurrentUser, useUpdateUser } from "@/services/user/query/use-user";
+import { useCurrentUser, useSignOut } from "@/services/auth/query/use-auth";
+import { useUpdateUser } from "@/services/user/query/use-user";
 import { roleLabel } from "@/services/user/types";
 import { hasUserChanged, mapUpdateUserRequest } from "@/services/user/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -93,7 +93,7 @@ const Profile = () => {
 			"birthDate",
 			user?.birthDate
 				? maskitoStringifyDate(toDate(user.birthDate, "YYYY.MM.DD"), dateParams)
-				: ""
+				: "",
 		);
 
 		if (user?.faculty) {
@@ -253,7 +253,7 @@ const Profile = () => {
 												placeholder="Выберите группу"
 												options={filterGroupOptions(
 													values.faculty?.value,
-													values.course?.value
+													values.course?.value,
 												)}
 												selectedOption={form.getValues("group")}
 												onChange={field.onChange}
@@ -283,9 +283,19 @@ const Profile = () => {
 					</div>
 
 					<Bottom>
-						<Button block disabled={!isSubmitEnabled()}>
-							{isUpdatePending ? <Loader /> : "Сохранить"}
+						<Button
+							onClick={() => navigate("/password-reset/code")}
+							block
+							type="button"
+							variant="outline"
+						>
+							Сбросить пароль
 						</Button>
+						{isSubmitEnabled() && (
+							<Button block disabled={!isSubmitEnabled()}>
+								{isUpdatePending ? <Loader /> : "Сохранить"}
+							</Button>
+						)}
 					</Bottom>
 				</form>
 			</Layout>

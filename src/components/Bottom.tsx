@@ -1,11 +1,7 @@
-import type { ReactElement } from "react";
+import type { PropsWithChildren } from "react";
 
-type Props = {
-	children: ReactElement | ReactElement[];
-};
-
-const Bottom = ({ children }: Props) => {
-	return <div className="sticky bottom-4 z-20">{children}</div>;
+const Bottom = ({ children }: PropsWithChildren) => {
+	return <div className="sticky bottom-4 z-20 space-y-2">{children}</div>;
 };
 
 export default Bottom;

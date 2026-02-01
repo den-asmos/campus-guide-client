@@ -20,9 +20,9 @@ import {
 	type TimetableFormSchema,
 	formSchema,
 } from "@/schemas/timetableFormSchema";
+import { useCurrentUser } from "@/services/auth/query/use-auth";
 import { useGroupTimetable } from "@/services/timetable/query/use-timetable";
 import { mapTimetableRequest } from "@/services/timetable/utils";
-import { useCurrentUser } from "@/services/user/query/use-user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -44,7 +44,7 @@ const Timetable = () => {
 	} = useCurrentUser();
 	const [currentWeek] = useState(currentWeekDates().dates);
 	const [selectedDay, setSelectedDay] = useState(
-		currentWeekDates().currentDate
+		currentWeekDates().currentDate,
 	);
 
 	const form = useForm<TimetableFormSchema>({
@@ -182,7 +182,7 @@ const Timetable = () => {
 											placeholder="Группа"
 											options={filterGroupOptions(
 												values.faculty?.value,
-												values.course?.value
+												values.course?.value,
 											)}
 											selectedOption={form.getValues("group")}
 											onChange={field.onChange}

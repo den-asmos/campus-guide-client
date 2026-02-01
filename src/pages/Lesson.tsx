@@ -68,7 +68,7 @@ const Lesson = () => {
 						}
 						block
 					>
-						<MapPin /> Маршрут
+						Показать на карте <MapPin />
 					</Button>
 				</Bottom>
 			</Layout>

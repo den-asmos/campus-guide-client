@@ -33,10 +33,7 @@ export const getErrorMessage = (error: AxiosError) => {
 		return undefined;
 	}
 
-	return (
-		(responseData as RequestError).error ||
-		(responseData as RequestError).message
-	);
+	return `${(responseData as RequestError).message}: ${(responseData as RequestError).error}`;
 };
 
 export const filterCourseOptions = (faculty: Faculty | undefined) => {
