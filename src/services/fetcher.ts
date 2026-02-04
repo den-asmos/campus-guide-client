@@ -7,6 +7,13 @@ export const fetcher = axios.create({
 	},
 });
 
+fetcher.interceptors.request.use((config) => {
+	if (config.data instanceof FormData) {
+		delete config.headers["Content-Type"];
+	}
+	return config;
+});
+
 fetcher.interceptors.request.use(
 	(config) => {
 		const token = localStorage.getItem("token");
@@ -17,7 +24,7 @@ fetcher.interceptors.request.use(
 	},
 	(error) => {
 		return Promise.reject(error);
-	}
+	},
 );
 
 fetcher.interceptors.response.use(
@@ -33,7 +40,7 @@ fetcher.interceptors.response.use(
 		}
 
 		return Promise.reject(error);
-	}
+	},
 );
 
 export type RequestError = {

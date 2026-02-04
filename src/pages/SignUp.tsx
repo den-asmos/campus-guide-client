@@ -178,7 +178,7 @@ const SignUp = () => {
 					</FieldGroup>
 
 					<Bottom>
-						<Button block disabled={!form.formState.isValid}>
+						<Button block disabled={!form.formState.isValid || isPending}>
 							{isPending ? <Loader /> : "Зарегистрироваться"}
 						</Button>
 					</Bottom>

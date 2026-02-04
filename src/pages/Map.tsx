@@ -292,7 +292,7 @@ const Map = () => {
 				<DrawerContent>
 					<DrawerHeader className="px-4 items-start">
 						<DrawerTitle>Маршрут</DrawerTitle>
-						<DrawerDescription className="text-left">
+						<DrawerDescription>
 							Для построения маршрута выберите точки отправления и назначения
 						</DrawerDescription>
 					</DrawerHeader>

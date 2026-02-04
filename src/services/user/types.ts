@@ -393,3 +393,7 @@ export type UpdateUserRequest = {
 	birthDate: Date | null;
 	gender: Gender | null;
 };
+
+export type UpdateAvatarResponse = {
+	message: string;
+}

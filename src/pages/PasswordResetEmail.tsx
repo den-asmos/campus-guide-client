@@ -20,8 +20,14 @@ import {
 } from "@/hooks/usePersistedState";
 import { PASSWORD_RESET } from "@/lib/constants";
 import { getErrorMessage } from "@/lib/utils";
-import { formSchema as codeFormSchema } from "@/schemas/codeFormSchema";
-import { formSchema as emailFormSchema } from "@/schemas/emailFormSchema";
+import {
+	formSchema as codeFormSchema,
+	type CodeFormSchema,
+} from "@/schemas/codeFormSchema";
+import {
+	formSchema as emailFormSchema,
+	type EmailFormSchema,
+} from "@/schemas/emailFormSchema";
 import {
 	useRequestPasswordReset,
 	useVerifyCode,
@@ -51,12 +57,12 @@ const PasswordResetEmail = () => {
 	const { mutateAsync: verifyCode, isPending: isVerifyCodePending } =
 		useVerifyCode();
 
-	const emailForm = useForm({
+	const emailForm = useForm<EmailFormSchema>({
 		resolver: zodResolver(emailFormSchema),
 		defaultValues: { email: "" },
 	});
 
-	const codeForm = useForm({
+	const codeForm = useForm<CodeFormSchema>({
 		resolver: zodResolver(codeFormSchema),
 		defaultValues: { code: "" },
 	});
@@ -151,7 +157,7 @@ const PasswordResetEmail = () => {
 								onClick={handleRequestCode}
 								block
 								type="button"
-								disabled={!emailForm.formState.isValid}
+								disabled={!emailForm.formState.isValid || isRequestResetPending}
 							>
 								{isRequestResetPending ? <Loader /> : "Выслать код"}
 							</Button>

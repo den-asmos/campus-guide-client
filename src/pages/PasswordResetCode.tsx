@@ -19,7 +19,7 @@ import {
 } from "@/hooks/usePersistedState";
 import { PASSWORD_RESET } from "@/lib/constants";
 import { getErrorMessage } from "@/lib/utils";
-import { formSchema } from "@/schemas/codeFormSchema";
+import { formSchema, type CodeFormSchema } from "@/schemas/codeFormSchema";
 import { useCurrentUser } from "@/services/auth/query/use-auth";
 import {
 	useRequestPasswordReset,
@@ -59,7 +59,7 @@ const PasswordResetCode = () => {
 	const { mutateAsync: verifyCode, isPending: isVerifyCodePending } =
 		useVerifyCode();
 
-	const form = useForm({
+	const form = useForm<CodeFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues,
 	});
@@ -210,7 +210,7 @@ const PasswordResetCode = () => {
 								onClick={handleRequestCode}
 								block
 								type="button"
-								disabled={!user}
+								disabled={!user || isRequestResetPending}
 							>
 								{isRequestResetPending ? <Loader /> : "Выслать код"}
 							</Button>

@@ -1,4 +1,6 @@
+import AvatarUploadDrawer from "@/components/AvatarUploadDrawer";
 import Bottom from "@/components/Bottom";
+import Dialog from "@/components/Dialog";
 import Header from "@/components/Header";
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
@@ -13,6 +15,7 @@ import {
 	facultyOptions,
 	genderOptions,
 	groupOptions,
+	MAX_IMAGE_SIZE,
 } from "@/lib/constants";
 import { dateOptions, dateParams } from "@/lib/maskito/date";
 import { toDate } from "@/lib/time";
@@ -27,7 +30,11 @@ import {
 	type ProfileFormSchema,
 } from "@/schemas/profileFormSchema";
 import { useCurrentUser, useSignOut } from "@/services/auth/query/use-auth";
-import { useUpdateUser } from "@/services/user/query/use-user";
+import {
+	useDeleteAvatar,
+	useUpdateAvatar,
+	useUpdateUser,
+} from "@/services/user/query/use-user";
 import { roleLabel } from "@/services/user/types";
 import { hasUserChanged, mapUpdateUserRequest } from "@/services/user/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +42,7 @@ import { maskitoStringifyDate } from "@maskito/kit";
 import { useMaskito } from "@maskito/react";
 import type { AxiosError } from "axios";
 import { LogOut } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -50,13 +57,20 @@ const defaultValues = {
 
 const Profile = () => {
 	const navigate = useNavigate();
+	const [isAvatarUploadDrawerOpen, setIsAvatarUploadDrawerOpen] =
+		useState(false);
 	const {
 		data: user,
 		isPending: isUserPending,
 		error: userError,
+		refetch: refetchUser,
 	} = useCurrentUser();
-	const { mutateAsync: updateUser, isPending: isUpdatePending } =
+	const { mutateAsync: updateUser, isPending: isUpdateUserPending } =
 		useUpdateUser();
+	const { mutateAsync: updateAvatar, isPending: isUpdateAvatarPending } =
+		useUpdateAvatar();
+	const { mutateAsync: deleteAvatar, isPending: isDeleteAvatarPending } =
+		useDeleteAvatar();
 	const { mutateAsync: signOut, isPending: isSignOutPending } = useSignOut();
 
 	useEffect(() => {
@@ -87,6 +101,42 @@ const Profile = () => {
 			toast.error(errorMessage);
 		}
 	});
+
+	const handleUpdateAvatar = async (avatar: File) => {
+		if (avatar.size > MAX_IMAGE_SIZE) {
+			toast.error("Размер изображения должен быть меньше 5 мб");
+		}
+
+		try {
+			const response = await updateAvatar(avatar);
+			await refetchUser();
+			toast.success(response.message);
+			setIsAvatarUploadDrawerOpen(false);
+		} catch (error) {
+			console.error(error);
+			const errorMessage =
+				getErrorMessage(error as AxiosError) || "Ошибка изменения аватара";
+			toast.error(errorMessage);
+		}
+	};
+
+	const handleDeleteAvatar = async () => {
+		if (!user?.avatar) {
+			return;
+		}
+
+		try {
+			const response = await deleteAvatar();
+			await refetchUser();
+			toast.success(response.message);
+			setIsAvatarUploadDrawerOpen(false);
+		} catch (error) {
+			console.error(error);
+			const errorMessage =
+				getErrorMessage(error as AxiosError) || "Ошибка удаления аватара";
+			toast.error(errorMessage);
+		}
+	};
 
 	useEffect(() => {
 		form.setValue(
@@ -152,13 +202,23 @@ const Profile = () => {
 				<Header
 					title="Профиль"
 					onClickLeft={() => navigate(-1)}
-					onClickRight={handleSignOut}
-					rightIcon={<LogOut className="size-5" />}
+					rightIcon={
+						<Dialog
+							title="Выход"
+							description="Вы уверены, что хотите выйти из приложения?"
+							cancelButtonTitle="Отмена"
+							submitButtonTitle="Выйти"
+							onSubmit={handleSignOut}
+						>
+							<LogOut className="size-5" />
+						</Dialog>
+					}
 				/>
-
-				<div className="flex flex-grow justify-center items-center">
-					<Loader color="primary" />
-				</div>
+				<Layout>
+					<div className="flex flex-grow justify-center items-center">
+						<Loader color="primary" />
+					</div>
+				</Layout>
 			</Wrapper>
 		);
 	}
@@ -172,8 +232,17 @@ const Profile = () => {
 			<Header
 				title="Профиль"
 				onClickLeft={() => navigate(-1)}
-				onClickRight={handleSignOut}
-				rightIcon={<LogOut className="size-5" />}
+				rightIcon={
+					<Dialog
+						title="Выход"
+						description="Вы уверены, что хотите выйти из приложения?"
+						cancelButtonTitle="Отмена"
+						submitButtonTitle="Выйти"
+						onSubmit={handleSignOut}
+					>
+						<LogOut className="size-5" />
+					</Dialog>
+				}
 			/>
 			<Layout>
 				<form onSubmit={onSubmit} className="flex flex-col flex-grow">
@@ -184,6 +253,7 @@ const Profile = () => {
 								firstName={user.firstName}
 								lastName={user.lastName}
 								variant="profile"
+								onClick={() => setIsAvatarUploadDrawerOpen(true)}
 							/>
 
 							<div className="flex flex-col space-y-1">
@@ -195,6 +265,15 @@ const Profile = () => {
 								</p>
 							</div>
 						</div>
+
+						<AvatarUploadDrawer
+							isOpen={isAvatarUploadDrawerOpen}
+							setIsOpen={setIsAvatarUploadDrawerOpen}
+							isLoading={isUpdateAvatarPending || isDeleteAvatarPending}
+							hasUploadedAvatar={!!user.avatar}
+							onSubmit={handleUpdateAvatar}
+							onDelete={handleDeleteAvatar}
+						/>
 
 						<FieldGroup>
 							<div className="flex flex-col space-y-4">
@@ -292,8 +371,11 @@ const Profile = () => {
 							Сбросить пароль
 						</Button>
 						{isSubmitEnabled() && (
-							<Button block disabled={!isSubmitEnabled()}>
-								{isUpdatePending ? <Loader /> : "Сохранить"}
+							<Button
+								block
+								disabled={!isSubmitEnabled() || isUpdateUserPending}
+							>
+								{isUpdateUserPending ? <Loader /> : "Сохранить"}
 							</Button>
 						)}
 					</Bottom>

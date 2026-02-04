@@ -45,3 +45,5 @@ export const PASSWORD_RESET = {
 	EXPIRY_KEY: "passwordResetExpiry",
 	COUNTDOWN_KEY: "passwordResetCountdown",
 };
+
+export const MAX_IMAGE_SIZE = 5 * 1024 * 1024;

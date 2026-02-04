@@ -14,7 +14,10 @@ import Wrapper from "@/components/Wrapper";
 import { usePersistedState } from "@/hooks/usePersistedState";
 import { PASSWORD_RESET } from "@/lib/constants";
 import { getErrorMessage } from "@/lib/utils";
-import { formSchema } from "@/schemas/passwordFormSchema";
+import {
+	formSchema,
+	type PasswordFormSchema,
+} from "@/schemas/passwordFormSchema";
 import { useSignOut } from "@/services/auth/query/use-auth";
 import { useResetPassword } from "@/services/user/query/use-password-reset";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,12 +35,13 @@ const PasswordReset = () => {
 	const navigate = useNavigate();
 	const [code] = usePersistedState(PASSWORD_RESET.CODE_KEY, "");
 	const [email] = usePersistedState(PASSWORD_RESET.EMAIL_KEY, "");
-	const form = useForm({
+	const { mutateAsync: resetPassword, isPending } = useResetPassword();
+	const { mutateAsync: signOut } = useSignOut();
+	
+	const form = useForm<PasswordFormSchema>({
 		resolver: zodResolver(formSchema),
 		defaultValues,
 	});
-	const { mutateAsync: resetPassword, isPending } = useResetPassword();
-	const { mutateAsync: signOut } = useSignOut();
 
 	const onSubmit = form.handleSubmit(async (values) => {
 		try {
@@ -84,7 +88,7 @@ const PasswordReset = () => {
 					</FieldGroup>
 
 					<Bottom>
-						<Button block disabled={!form.formState.isValid}>
+						<Button block disabled={!form.formState.isValid || isPending}>
 							{isPending ? <Loader /> : "Сменить пароль"}
 						</Button>
 					</Bottom>

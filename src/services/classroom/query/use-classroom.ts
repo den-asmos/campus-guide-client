@@ -9,6 +9,7 @@ export const useClassroom = (location: string | null) => {
 		queryKey: [CLASSROOM_KEY, location],
 		queryFn: () => classroom(location),
 		enabled: !!location,
+		retry: false,
 	});
 };
 
@@ -16,5 +17,6 @@ export const useFloorClassrooms = (floor: number) => {
 	return useQuery({
 		queryKey: [FLOOR_CLASSROOMS_KEY, floor],
 		queryFn: () => floorClassrooms(floor),
+		retry: false,
 	});
 };

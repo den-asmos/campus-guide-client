@@ -19,12 +19,19 @@ type Props = VariantProps<typeof userAvatarVariants> & {
 	avatar?: string | null;
 	firstName?: string;
 	lastName?: string;
+	onClick?: () => void;
 };
 
-const UserAvatar = ({ avatar, firstName, lastName, variant }: Props) => {
+const UserAvatar = ({
+	avatar,
+	firstName,
+	lastName,
+	variant,
+	onClick,
+}: Props) => {
 	if (!firstName || !lastName) {
 		return (
-			<Avatar className={cn(userAvatarVariants({ variant }))}>
+			<Avatar onClick={onClick} className={cn(userAvatarVariants({ variant }))}>
 				<div className="bg-border animate-pulse"></div>
 			</Avatar>
 		);
@@ -32,14 +39,18 @@ const UserAvatar = ({ avatar, firstName, lastName, variant }: Props) => {
 
 	if (avatar) {
 		return (
-			<Avatar className={cn(userAvatarVariants({ variant }))}>
-				<img src={avatar} alt="avatar" />
+			<Avatar onClick={onClick} className={cn(userAvatarVariants({ variant }))}>
+				<img
+					src={avatar}
+					alt="avatar"
+					className="w-full h-full object-cover scale-110"
+				/>
 			</Avatar>
 		);
 	}
 
 	return (
-		<Avatar className={cn(userAvatarVariants({ variant }))}>
+		<Avatar onClick={onClick} className={cn(userAvatarVariants({ variant }))}>
 			<p className="font-medium text-button-primary">
 				{firstName[0].toUpperCase()}
 			</p>
