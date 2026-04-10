@@ -1,6 +1,5 @@
 import type { Classroom } from "@/services/classroom/types";
 import type { RequestError } from "@/services/fetcher";
-import type { TimetableLesson } from "@/services/timetable/types";
 import {
 	Course,
 	Faculty,
@@ -58,18 +57,11 @@ export const filterGroupOptions = (
 	);
 };
 
-export const compareLessons = (
-	first: TimetableLesson,
-	second: TimetableLesson,
+export const compareObjects = <T extends Record<string, unknown>>(
+	first: T,
+	second: T,
 ) => {
-	return (
-		first.number === second.number &&
-		first.classroom === second.classroom &&
-		first.lecturer === second.lecturer &&
-		first.subject === second.subject &&
-		first.type === second.type &&
-		first.time === second.time
-	);
+	return Object.entries(first).every(([key, value]) => second[key] === value);
 };
 
 export const getUserLabel = (user: User | undefined): string => {
@@ -97,6 +89,6 @@ export const findClassroom = (
 		return;
 	}
 
-	const classroomTitle = locationId.split("location-id-")[1];
-	return classrooms.find((classroom) => classroom.title === classroomTitle);
+	const classroomId = locationId.split("location-id-")[1];
+	return classrooms.find((classroom) => classroom.id === classroomId);
 };

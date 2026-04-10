@@ -45,6 +45,7 @@ const TimetableLessonCard = ({ lesson, variant = "md" }: Props) => {
 							<p className="text-sm leading-none">
 								{subgroup.number} пара ({subgroup.time})
 							</p>
+							<p className="text-xs leading-none">{subgroup.subgroupName}</p>
 						</div>
 
 						<ChevronRight />
@@ -87,6 +88,7 @@ const TimetableLessonCard = ({ lesson, variant = "md" }: Props) => {
 						<p className="text-sm leading-none">
 							{subgroup.number} пара ({subgroup.time})
 						</p>
+						<p className="text-xs leading-none">{subgroup.subgroupName}</p>
 					</div>
 
 					<ChevronRight />

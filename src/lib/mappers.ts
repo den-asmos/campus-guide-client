@@ -1,5 +1,5 @@
 import type { TimetableDay, TimetableLesson } from "@/services/timetable/types";
-import { compareLessons } from "./utils";
+import { compareObjects } from "./utils";
 
 export const mapTimetableDay = (
 	selectedDay: string | undefined,
@@ -32,7 +32,7 @@ export const mapTimetableDay = (
 		if (existingLessonIndex === -1) {
 			result.push([lesson]);
 		} else if (
-			!result[existingLessonIndex].every((item) => compareLessons(item, lesson))
+			!result[existingLessonIndex].every((item) => compareObjects(item, lesson))
 		) {
 			result[existingLessonIndex].push(lesson);
 		} else {

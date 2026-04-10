@@ -7,13 +7,26 @@ import svgr from "vite-plugin-svgr";
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [
-		react(),
+		react({
+			babel: {
+				plugins: ["babel-plugin-react-compiler"],
+			},
+		}),
 		tailwindcss(),
 		svgr(),
 	],
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
+		},
+	},
+	server: {
+		proxy: {
+			"/api": {
+				target: "https://pf6zg0q0-7070.euw.devtunnels.ms/",
+				changeOrigin: true,
+				secure: true,
+			},
 		},
 	},
 });

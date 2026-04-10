@@ -14,7 +14,6 @@ export type DirectionResponse = {
 
 export type DirectionNode = Classroom & {
 	type: NodeType;
-	points: string;
 };
 
 export enum NodeType {

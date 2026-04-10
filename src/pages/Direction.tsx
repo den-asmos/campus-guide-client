@@ -1,4 +1,4 @@
-import Floor3SVG from "@/assets/floor-3.svg?react";
+import DisplayedFloor from "@/components/DisplayedFloor";
 import Header from "@/components/Header";
 import Pin from "@/components/icons/Pin";
 import Layout from "@/components/Layout";
@@ -12,9 +12,9 @@ import {
 	DrawerTitle,
 } from "@/components/ui/drawer";
 import Wrapper from "@/components/Wrapper";
+import { Floor } from "@/services/classroom/types";
 import { useDirection } from "@/services/direction/query/use-direction";
 import type { DirectionNode } from "@/services/direction/types";
-import { Minus, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
@@ -28,7 +28,8 @@ const Direction = () => {
 	} | null>(null);
 	const [origin, setOrigin] = useState<DirectionNode | null>(null);
 	const [destination, setDestination] = useState<DirectionNode | null>(null);
-	const [steps, setSteps] = useState<DirectionNode[]>([]);
+	const [path, setPath] = useState<string[]>([]);
+	const [selectedFloor, setSelectedFloor] = useState<Floor>(Floor.first);
 	const svgRef = useRef<SVGSVGElement>(null);
 	const { data: direction, isPending: isDirectionPending } =
 		useDirection(locations);
@@ -37,14 +38,16 @@ const Direction = () => {
 	useEffect(() => {
 		const searchOrigin = searchParams.get("origin");
 		const searchDestination = searchParams.get("destination");
+		const searchFloor = searchParams.get("floor");
 
-		if (!searchOrigin || !searchDestination) {
+		if (!searchOrigin || !searchDestination || !searchFloor) {
 			navigate("/");
 		} else {
 			setLocations({
 				origin: searchOrigin,
 				destination: searchDestination,
 			});
+			setSelectedFloor(parseInt(searchFloor));
 		}
 	}, [navigate, searchParams]);
 
@@ -52,7 +55,7 @@ const Direction = () => {
 		if (direction) {
 			setOrigin(direction.origin);
 			setDestination(direction.destination);
-			setSteps(direction.nodes);
+			setPath(direction.path);
 		}
 	}, [direction]);
 
@@ -70,25 +73,35 @@ const Direction = () => {
 	}
 
 	return (
-		<Wrapper>
+		<Wrapper className="h-screen">
 			<Header title="Маршрут" onClickLeft={() => navigate(-1)} />
-			<Layout>
+			<Layout className="p-0 relative overflow-hidden">
 				<TransformWrapper
-					initialScale={1}
+					initialScale={2}
 					minScale={1}
-					maxScale={3}
-					wheel={{ step: 0.2 }}
+					maxScale={5}
+					wheel={{ step: 0.4 }}
+					smooth={true}
 					limitToBounds={false}
+					centerOnInit={true}
+					key={selectedFloor}
 				>
-					{({ zoomIn, zoomOut }) => (
+					{() => (
 						<>
-							<div className="fixed top-1/2 right-4 -translate-y-1/2 z-20 flex flex-col space-y-2">
-								<Button onClick={() => zoomIn()}>
-									<Plus className="stroke-3" />
-								</Button>
-								<Button onClick={() => zoomOut()}>
-									<Minus className="stroke-3" />
-								</Button>
+							<div className="p-2 fixed top-1/2 right-0 -translate-y-1/2 z-20 flex flex-col space-y-3 rounded-sm bg-white/70">
+								{Object.values(Floor)
+									.filter((floor) => typeof floor === "number")
+									.map((floor) => (
+										<Button
+											key={floor}
+											variant={selectedFloor === floor ? "outline" : "default"}
+											onClick={() => {
+												setSelectedFloor(floor);
+											}}
+										>
+											{floor}
+										</Button>
+									))}
 							</div>
 							<TransformComponent
 								wrapperStyle={{
@@ -100,12 +113,7 @@ const Direction = () => {
 									height: "100%",
 								}}
 							>
-								<svg
-									className="w-full h-auto select-none"
-									viewBox="0 0 640 3406"
-									preserveAspectRatio="xMidYMid meet"
-								>
-									<Floor3SVG ref={svgRef} />
+								<DisplayedFloor floor={selectedFloor} ref={svgRef}>
 									{origin && (
 										<Pin
 											x={origin.latitude - 5}
@@ -124,31 +132,15 @@ const Direction = () => {
 											className="fill-red-700 stroke-red-900 stroke-1 z-10 animate-in fade-in slide-in-from-top-3 duration-150"
 										/>
 									)}
-									{origin && (
+									{path.map((node) => (
 										<polyline
-											key={`${origin.latitude}-${origin.longitude}`}
-											points={origin.points}
-											strokeDasharray="10"
-											className="stroke-red-700 fill-none stroke-3 animate-pulse"
-										/>
-									)}
-									{steps.map((node) => (
-										<polyline
-											key={node.points}
-											points={node.points}
+											key={node}
+											points={node}
 											strokeDasharray="10"
 											className="stroke-red-700 fill-none stroke-3 animate-pulse"
 										/>
 									))}
-									{destination && (
-										<polyline
-											key={`${destination.latitude}-${destination.longitude}`}
-											points={destination.points}
-											strokeDasharray="10"
-											className="stroke-red-700 fill-none stroke-3 animate-pulse"
-										/>
-									)}
-								</svg>
+								</DisplayedFloor>
 							</TransformComponent>
 						</>
 					)}

@@ -1,4 +1,4 @@
-import Floor3SVG from "@/assets/floor-3.svg?react";
+import DisplayedFloor from "@/components/DisplayedFloor";
 import Header from "@/components/Header";
 import Pin from "@/components/icons/Pin";
 import Layout from "@/components/Layout";
@@ -17,8 +17,8 @@ import { inputVariants } from "@/components/ui/variants";
 import Wrapper from "@/components/Wrapper";
 import { cn, findClassroom } from "@/lib/utils";
 import { useFloorClassrooms } from "@/services/classroom/query/use-classroom";
-import type { Classroom } from "@/services/classroom/types";
-import { ArrowDownUp, MapPin, Minus, Plus, RouteIcon } from "lucide-react";
+import { Floor, type Classroom } from "@/services/classroom/types";
+import { ArrowDownUp, MapPin, RouteIcon } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
@@ -36,6 +36,7 @@ const Map = () => {
 	const [selectedLocation, setSelectedLocation] = useState<Classroom | null>(
 		null,
 	);
+	const [selectedFloor, setSelectedFloor] = useState<Floor>(Floor.third);
 	const [origin, setOrigin] = useState<Classroom | null>(null);
 	const [destination, setDestination] = useState<Classroom | null>(null);
 	const [pin, setPin] = useState<MapPin | null>(null);
@@ -43,7 +44,7 @@ const Map = () => {
 	const [isLocationDrawerOpen, setIsLocationDrawerOpen] = useState(false);
 	const [isDirectionDrawerOpen, setIsDirectionDrawerOpen] = useState(false);
 	const { data: floorClassrooms, isLoading: isFloorClassroomsLoading } =
-		useFloorClassrooms(3);
+		useFloorClassrooms(selectedFloor);
 
 	const handleMapClick = useCallback(
 		(event: React.MouseEvent<SVGSVGElement>) => {
@@ -146,7 +147,7 @@ const Map = () => {
 		} else {
 			navigate({
 				pathname: "/direction",
-				search: `?origin=${origin.title}&destination=${destination.title}`,
+				search: `?origin=${origin.id}&destination=${destination.id}&floor=${origin.floor}`,
 			});
 		}
 		setIsDirectionDrawerOpen(false);
@@ -199,26 +200,36 @@ const Map = () => {
 	}
 
 	return (
-		<Wrapper>
+		<Wrapper className="h-screen">
 			<Header title="Карта" onClickLeft={() => navigate(-1)} />
-			<Layout className="p-0 relative">
+			<Layout className="p-0 relative overflow-hidden">
 				<TransformWrapper
-					initialScale={1}
+					initialScale={2}
 					minScale={1}
-					maxScale={3}
-					wheel={{ step: 0.2 }}
+					maxScale={5}
+					wheel={{ step: 0.4 }}
 					smooth={true}
 					limitToBounds={false}
+					centerOnInit={true}
+					key={selectedFloor}
 				>
-					{({ zoomIn, zoomOut }) => (
+					{() => (
 						<>
-							<div className="fixed top-1/2 right-4 -translate-y-1/2 z-20 flex flex-col space-y-2">
-								<Button onClick={() => zoomIn()}>
-									<Plus className="stroke-3" />
-								</Button>
-								<Button onClick={() => zoomOut()}>
-									<Minus className="stroke-3" />
-								</Button>
+							<div className="p-2 fixed top-1/2 right-0 -translate-y-1/2 z-20 flex flex-col space-y-3 rounded-sm bg-white/70">
+								{Object.values(Floor)
+									.filter((floor) => typeof floor === "number")
+									.map((floor) => (
+										<Button
+											key={floor}
+											variant={selectedFloor === floor ? "outline" : "default"}
+											onClick={() => {
+												setSelectedFloor(floor);
+												setPin(null);
+											}}
+										>
+											{floor}
+										</Button>
+									))}
 							</div>
 							<TransformComponent
 								wrapperStyle={{
@@ -230,13 +241,11 @@ const Map = () => {
 									height: "100%",
 								}}
 							>
-								<svg
-									className="w-full h-auto select-none"
-									viewBox="0 0 640 3406"
-									preserveAspectRatio="xMidYMid meet"
+								<DisplayedFloor
+									floor={selectedFloor}
+									ref={svgRef}
 									onClick={handleMapClick}
 								>
-									<Floor3SVG ref={svgRef} />
 									{pin && (
 										<Pin
 											onClick={(event) => {
@@ -250,7 +259,18 @@ const Map = () => {
 											className="fill-red-700 stroke-red-900 stroke-1 z-10 animate-in fade-in slide-in-from-top-3 duration-150"
 										/>
 									)}
-								</svg>
+									{/* <Pin
+										onClick={(event) => {
+											event.stopPropagation();
+											removePin();
+										}}
+										x={760}
+										y={766}
+										key={`test`}
+										size={40}
+										className="fill-red-700 stroke-red-900 stroke-1 z-10 animate-in fade-in slide-in-from-top-3 duration-150"
+									/> */}
+								</DisplayedFloor>
 							</TransformComponent>
 						</>
 					)}
