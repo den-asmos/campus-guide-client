@@ -2,17 +2,17 @@ import { cn } from "@/lib/utils";
 import type { PropsWithChildren } from "react";
 
 type Props = PropsWithChildren<{
-	className?: string;
+  className?: string;
 }>;
 
 const Layout = ({ children, className }: Props) => {
-	return (
-		<main
-			className={cn("p-4 flex-1 flex flex-col w-full bg-background", className)}
-		>
-			{children}
-		</main>
-	);
+  return (
+    <main
+      className={cn("bg-background flex w-full flex-1 flex-col p-4", className)}
+    >
+      {children}
+    </main>
+  );
 };
 
 export default Layout;

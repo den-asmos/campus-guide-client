@@ -5,25 +5,25 @@ import * as React from "react";
 import { buttonVariants } from "./variants";
 
 function Button({
-	className,
-	variant,
-	size,
-	asChild = false,
-	block = false,
-	...props
+  className,
+  variant,
+  size,
+  asChild = false,
+  block = false,
+  ...props
 }: React.ComponentProps<"button"> &
-	VariantProps<typeof buttonVariants> & {
-		asChild?: boolean;
-	}) {
-	const Comp = asChild ? Slot : "button";
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  }) {
+  const Comp = asChild ? Slot : "button";
 
-	return (
-		<Comp
-			data-slot="button"
-			className={cn(buttonVariants({ variant, size, block, className }))}
-			{...props}
-		/>
-	);
+  return (
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, block, className }))}
+      {...props}
+    />
+  );
 }
 
 export { Button };

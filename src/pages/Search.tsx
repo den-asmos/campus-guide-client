@@ -5,17 +5,17 @@ import Wrapper from "@/components/Wrapper";
 import { useNavigate } from "react-router-dom";
 
 const Search = () => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	return (
-		<Wrapper>
-			<Header title="Поиск" onClickLeft={() => navigate(-1)} />
-			<Layout>
-				<div>Search</div>
-			</Layout>
-			<Navbar />
-		</Wrapper>
-	);
+  return (
+    <Wrapper>
+      <Header title="Поиск" onClickLeft={() => navigate(-1)} />
+      <Layout>
+        <div>Search</div>
+      </Layout>
+      <Navbar />
+    </Wrapper>
+  );
 };
 
 export default Search;

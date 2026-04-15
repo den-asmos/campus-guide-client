@@ -1,24 +1,31 @@
-import type { Classroom } from "../classroom/types";
+import type { Classroom, Floor } from "../classroom/types";
 
 export type DirectionRequest = {
-	origin: string;
-	destination: string;
+  origin: string;
+  destination: string;
 };
 
 export type DirectionResponse = {
-	path: string[];
-	nodes: DirectionNode[];
-	origin: DirectionNode;
-	destination: DirectionNode;
+  groups: FloorGroup[];
+  origin: DirectionNode;
+  destination: DirectionNode;
 };
 
 export type DirectionNode = Classroom & {
-	type: NodeType;
+  type: NodeType;
+};
+
+export type FloorGroup = {
+  floor: Floor;
+  path: string;
+  nodes: DirectionNode[];
+  origin: DirectionNode;
+  destination: DirectionNode;
 };
 
 export enum NodeType {
-	classroom,
-	connector,
-	stairs,
-	elevator,
+  classroom = "classroom",
+  connector = "connector",
+  stairs = "stairs",
+  elevator = "elevator",
 }

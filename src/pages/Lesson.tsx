@@ -6,94 +6,98 @@ import { Button } from "@/components/ui/button";
 import Wrapper from "@/components/Wrapper";
 import { useClassroom } from "@/services/classroom/query/use-classroom";
 import {
-	lessonTypeLabel,
-	type TimetableLesson,
+  lessonTypeLabel,
+  type TimetableLesson,
 } from "@/services/timetable/types";
 import { MapPin } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Lesson = () => {
-	const navigate = useNavigate();
-	const location = useLocation();
-	const { subgroup } = location.state as {
-		subgroup: TimetableLesson & { subgroupName: string };
-	};
-	const { data: classroom, isPending } = useClassroom(subgroup.classroom);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { subgroup } = location.state as {
+    subgroup: TimetableLesson & { subgroupName: string };
+  };
+  const { data: classroom, isPending } = useClassroom(subgroup.classroom);
 
-	if (isPending) {
-		return (
-			<Wrapper>
-				<Header title="Пара" onClickLeft={() => navigate(-1)} />
-				<Layout>
-					<div className="flex flex-grow justify-center items-center">
-						<Loader color="primary" />
-					</div>
-				</Layout>
-			</Wrapper>
-		);
-	}
+  if (isPending) {
+    return (
+      <Wrapper>
+        <Header title="Пара" onClickLeft={() => navigate(-1)} />
+        <Layout>
+          <div className="flex flex-grow items-center justify-center">
+            <Loader color="primary" />
+          </div>
+        </Layout>
+      </Wrapper>
+    );
+  }
 
-	return (
-		<Wrapper>
-			<Header title="Пара" onClickLeft={() => navigate(-1)} />
-			<Layout>
-				<div className="flex flex-col flex-grow space-y-8">
-					<h3 className="text-xl font-semibold leading-5 text-wrap">
-						{subgroup.subject}
-					</h3>
+  return (
+    <Wrapper>
+      <Header title="Пара" onClickLeft={() => navigate(-1)} />
+      <Layout>
+        <div className="flex flex-grow flex-col space-y-8">
+          <h3 className="text-xl leading-5 font-semibold text-wrap">
+            {subgroup.subject}
+          </h3>
 
-					<div className="flex flex-col space-y-5">
-						{subgroup.classroom && (
-							<div className="flex flex-col space-y-2">
-								<h4 className="font-medium leading-none">Аудитория {subgroup.classroom}</h4>
-								<p className="text-sm leading-none">{classroom?.description}</p>
-							</div>
-						)}
+          <div className="flex flex-col space-y-5">
+            {subgroup.classroom && (
+              <div className="flex flex-col space-y-2">
+                <h4 className="leading-none font-medium">
+                  Аудитория {subgroup.classroom}
+                </h4>
+                <p className="text-sm leading-none">{classroom?.description}</p>
+              </div>
+            )}
 
-						{subgroup.lecturer && (
-							<div className="flex flex-col space-y-2">
-								<h4 className="font-medium leading-none">Преподаватель</h4>
-								<p className="text-sm leading-none">{subgroup.lecturer}</p>
-							</div>
-						)}
+            {subgroup.lecturer && (
+              <div className="flex flex-col space-y-2">
+                <h4 className="leading-none font-medium">Преподаватель</h4>
+                <p className="text-sm leading-none">{subgroup.lecturer}</p>
+              </div>
+            )}
 
-						<div className="flex flex-col space-y-2">
-							<h4 className="font-medium leading-none">Вид занятия</h4>
-							<p className="text-sm leading-none">
-								{lessonTypeLabel[subgroup.type]}
-							</p>
-						</div>
+            <div className="flex flex-col space-y-2">
+              <h4 className="leading-none font-medium">Вид занятия</h4>
+              <p className="text-sm leading-none">
+                {lessonTypeLabel[subgroup.type]}
+              </p>
+            </div>
 
-						<div className="flex flex-col space-y-2">
-							<h4 className="font-medium leading-none">Группа</h4>
-							<p className="text-sm leading-none">{subgroup.subgroupName}</p>
-						</div>
+            <div className="flex flex-col space-y-2">
+              <h4 className="leading-none font-medium">Группа</h4>
+              <p className="text-sm leading-none">{subgroup.subgroupName}</p>
+            </div>
 
-						<div className="flex flex-col space-y-2">
-							<h4 className="font-medium leading-none">Время</h4>
-							<p className="text-sm leading-none">
-								{subgroup.number} пара ({subgroup.time})
-							</p>
-						</div>
-					</div>
-				</div>
+            <div className="flex flex-col space-y-2">
+              <h4 className="leading-none font-medium">Время</h4>
+              <p className="text-sm leading-none">
+                {subgroup.number} пара ({subgroup.time})
+              </p>
+            </div>
+          </div>
+        </div>
 
-				<Bottom>
-					<Button
-						onClick={() =>
-							navigate({
-								pathname: "/map",
-								search: `?classroom=${subgroup.classroom}`,
-							})
-						}
-						block
-					>
-						Показать на карте <MapPin />
-					</Button>
-				</Bottom>
-			</Layout>
-		</Wrapper>
-	);
+        {subgroup.classroom !== null && (
+          <Bottom>
+            <Button
+              onClick={() =>
+                navigate({
+                  pathname: "/map",
+                  search: `?floor=${subgroup.classroom?.[0]}&classroom=${subgroup.classroom}`,
+                })
+              }
+              block
+            >
+              Показать на карте <MapPin />
+            </Button>
+          </Bottom>
+        )}
+      </Layout>
+    </Wrapper>
+  );
 };
 
 export default Lesson;

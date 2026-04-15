@@ -4,18 +4,18 @@ import * as React from "react";
 import { inputVariants } from "./variants";
 
 function Input({
-	className,
-	type,
-	...props
+  className,
+  type,
+  ...props
 }: React.ComponentProps<"input"> & VariantProps<typeof inputVariants>) {
-	return (
-		<input
-			type={type}
-			data-slot="input"
-			className={cn(inputVariants(), className)}
-			{...props}
-		/>
-	);
+  return (
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(inputVariants(), className)}
+      {...props}
+    />
+  );
 }
 
 export { Input };

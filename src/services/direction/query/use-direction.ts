@@ -5,9 +5,9 @@ import type { DirectionRequest } from "../types";
 export const DIRECTION_KEY = "direction";
 
 export const useDirection = (request: DirectionRequest | null) => {
-	return useQuery({
-		queryKey: [DIRECTION_KEY],
-		queryFn: () => direction(request),
-		enabled: !!request
-	});
+  return useQuery({
+    queryKey: [DIRECTION_KEY],
+    queryFn: () => direction(request),
+    enabled: !!request,
+  });
 };
