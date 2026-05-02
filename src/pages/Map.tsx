@@ -210,7 +210,7 @@ const Map = () => {
       <Wrapper>
         <Header title="Карта" onClickLeft={() => navigate(-1)} />
         <Layout>
-          <div className="flex flex-grow items-center justify-center">
+          <div className="flex grow items-center justify-center">
             <Loader color="primary" />
           </div>
         </Layout>

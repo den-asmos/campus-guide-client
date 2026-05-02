@@ -1,11 +1,14 @@
-import type { TimetableFormSchema } from "@/schemas/timetableFormSchema";
+import type {
+  GroupFormSchema,
+  LecturerFormSchema,
+} from "@/schemas/timetableFilterFormSchema";
 import type { User } from "../user/types";
-import type { TimetableRequest } from "./types";
+import type { GroupTimetableRequest, LecturerTimetableRequest } from "./types";
 
-export const mapTimetableRequest = (
-  values: Partial<TimetableFormSchema>,
-): TimetableRequest | null => {
-  if (!values.faculty || !values.course || !values.group) {
+export const mapGroupTimetableRequest = (
+  values: Partial<GroupFormSchema> | null,
+): GroupTimetableRequest | null => {
+  if (!values?.faculty || !values.course || !values.group) {
     return null;
   }
 
@@ -16,9 +19,23 @@ export const mapTimetableRequest = (
   };
 };
 
+export const mapLecturerTimetableRequest = (
+  values: Partial<LecturerFormSchema> | null,
+): LecturerTimetableRequest | null => {
+  if (!values?.firstName || !values.lastName || !values.middleName) {
+    return null;
+  }
+
+  return {
+    firstName: values.firstName,
+    lastName: values.lastName,
+    middleName: values.middleName,
+  };
+};
+
 export const mapGroupTimetableRequestForUser = (
   user: User | undefined,
-): TimetableRequest | null => {
+): GroupTimetableRequest | null => {
   if (!user?.faculty || !user.course || !user.group) {
     return null;
   }

@@ -146,7 +146,7 @@ const PasswordResetCode = () => {
       <Wrapper>
         <Header title="Сброс пароля" onClickLeft={navigateBack} />
 
-        <div className="flex flex-grow items-center justify-center">
+        <div className="flex grow items-center justify-center">
           <Loader color="primary" />
         </div>
       </Wrapper>
@@ -161,8 +161,8 @@ const PasswordResetCode = () => {
     <Wrapper>
       <Header title="Сброс пароля" onClickLeft={navigateBack} />
       <Layout>
-        <form onSubmit={handleVerifyCode} className="flex flex-grow flex-col">
-          <FieldGroup className="mb-6 flex flex-grow flex-col">
+        <form onSubmit={handleVerifyCode} className="flex grow flex-col">
+          <FieldGroup className="mb-6 flex grow flex-col">
             <div className="flex flex-1 flex-col space-y-5">
               <Hint className="text-center">
                 На Вашу электронную почту будет выслан 6-значный код

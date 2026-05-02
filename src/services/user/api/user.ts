@@ -37,7 +37,7 @@ export const updateAvatar = async (avatar: File) => {
   const formData = new FormData();
   formData.append("avatar", avatar);
 
-  const response = await fetcher.post<UpdateAvatarResponse>(
+  const response = await fetcher.put<UpdateAvatarResponse>(
     "/api/user/avatar",
     formData,
   );

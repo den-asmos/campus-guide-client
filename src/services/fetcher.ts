@@ -44,6 +44,8 @@ fetcher.interceptors.response.use(
 );
 
 export type RequestError = {
-  error: string;
-  message: string;
+  error: {
+    code: string;
+    message: string;
+  };
 };

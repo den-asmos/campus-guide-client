@@ -215,7 +215,7 @@ const Profile = () => {
           }
         />
         <Layout>
-          <div className="flex flex-grow items-center justify-center">
+          <div className="flex grow items-center justify-center">
             <Loader color="primary" />
           </div>
         </Layout>
@@ -245,8 +245,8 @@ const Profile = () => {
         }
       />
       <Layout>
-        <form onSubmit={onSubmit} className="flex flex-grow flex-col">
-          <div className="mb-6 flex flex-grow flex-col space-y-6">
+        <form onSubmit={onSubmit} className="flex grow flex-col">
+          <div className="mb-6 flex grow flex-col space-y-6">
             <div className="flex items-center space-x-4">
               <UserAvatar
                 avatar={user.avatar}

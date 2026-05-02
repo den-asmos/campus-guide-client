@@ -20,7 +20,7 @@ const Navbar = () => {
       </NavLink>
 
       <NavLink
-        to="/timetable"
+        to="/timetable/filter"
         className={({ isActive }) => cn(isActive && "text-button-primary")}
       >
         <Calendar />

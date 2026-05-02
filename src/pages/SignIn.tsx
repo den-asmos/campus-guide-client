@@ -44,11 +44,11 @@ const SignIn = () => {
   return (
     <Wrapper>
       <Layout>
-        <form onSubmit={onSubmit} className="flex flex-grow flex-col">
+        <form onSubmit={onSubmit} className="flex grow flex-col">
           <Logo />
 
-          <FieldGroup className="mb-6 flex flex-grow flex-col">
-            <div className="flex flex-grow flex-col justify-center space-y-5">
+          <FieldGroup className="mb-6 flex grow flex-col">
+            <div className="flex grow flex-col justify-center space-y-5">
               <h1 className="text-center text-3xl font-semibold">Вход</h1>
 
               <Controller

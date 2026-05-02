@@ -25,7 +25,7 @@ const Lesson = () => {
       <Wrapper>
         <Header title="Пара" onClickLeft={() => navigate(-1)} />
         <Layout>
-          <div className="flex flex-grow items-center justify-center">
+          <div className="flex grow items-center justify-center">
             <Loader color="primary" />
           </div>
         </Layout>
@@ -37,18 +37,18 @@ const Lesson = () => {
     <Wrapper>
       <Header title="Пара" onClickLeft={() => navigate(-1)} />
       <Layout>
-        <div className="flex flex-grow flex-col space-y-8">
+        <div className="flex grow flex-col space-y-8">
           <h3 className="text-xl leading-5 font-semibold text-wrap">
             {subgroup.subject}
           </h3>
 
           <div className="flex flex-col space-y-5">
-            {subgroup.classroom && (
+            {classroom && (
               <div className="flex flex-col space-y-2">
                 <h4 className="leading-none font-medium">
-                  Аудитория {subgroup.classroom}
+                  Аудитория {classroom.title}
                 </h4>
-                <p className="text-sm leading-none">{classroom?.description}</p>
+                <p className="text-sm leading-none">{classroom.description}</p>
               </div>
             )}
 
@@ -80,13 +80,13 @@ const Lesson = () => {
           </div>
         </div>
 
-        {subgroup.classroom !== null && (
+        {subgroup.classroom !== null && classroom && (
           <Bottom>
             <Button
               onClick={() =>
                 navigate({
                   pathname: "/map",
-                  search: `?floor=${subgroup.classroom?.[0]}&classroom=${subgroup.classroom}`,
+                  search: `?floor=${classroom.floor}&classroom=${classroom.id}`,
                 })
               }
               block

@@ -37,12 +37,12 @@ const Dialog = ({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel asChild className="flex-grow">
+          <AlertDialogCancel asChild className="grow">
             <Button block variant="outline">
               {cancelButtonTitle}
             </Button>
           </AlertDialogCancel>
-          <AlertDialogAction asChild className="flex-grow">
+          <AlertDialogAction asChild className="grow">
             <Button block onClick={onSubmit}>
               {submitButtonTitle}
             </Button>

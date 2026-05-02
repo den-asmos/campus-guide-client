@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/UserAvatar";
 import Wrapper from "@/components/Wrapper";
 import { useGreeting } from "@/hooks/useGreeting";
-import { useTimetable } from "@/hooks/useTimetable";
+import { useHomePageTimetable } from "@/hooks/useTimetable";
 import { mapTimetableDay } from "@/lib/mappers";
 import { currentDate, currentWeek, isLessonInFuture } from "@/lib/time";
 import { useCurrentUser } from "@/services/auth/query/use-auth";
@@ -30,7 +30,7 @@ const Home = () => {
     isLoading: isTimetableLoading,
     isFetched: isTimetableFetched,
     error: timetableError,
-  } = useTimetable(user);
+  } = useHomePageTimetable(user);
   const { userLabel, dayTimeGreeting } = useGreeting(user);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const Home = () => {
           onClickRight={() => navigate("/profile")}
         />
         <Layout>
-          <div className="flex flex-grow items-center justify-center">
+          <div className="flex grow items-center justify-center">
             <Loader color="primary" />
           </div>
         </Layout>
@@ -94,8 +94,8 @@ const Home = () => {
         onClickRight={() => navigate("/profile")}
       />
       <Layout>
-        <div className="flex flex-grow flex-col justify-around">
-          <div className="flex flex-grow flex-col justify-center space-y-6">
+        <div className="flex grow flex-col justify-around">
+          <div className="flex grow flex-col justify-center space-y-6">
             <div>
               <p className="text-base">{dayTimeGreeting},</p>
               <h4 className="text-xl font-semibold">{userLabel}</h4>
@@ -112,7 +112,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="flex flex-grow flex-col space-y-4">
+          <div className="flex grow flex-col space-y-4">
             <h3 className="text-xl font-semibold">Предстоящие пары</h3>
             <div className="flex space-x-4 overflow-x-scroll">
               {isTimetableFetched &&

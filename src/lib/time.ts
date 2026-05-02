@@ -21,17 +21,20 @@ export const currentWeek = () => {
   return `${monday.format("DD.MM.YYYY")} — ${sunday.format("DD.MM.YYYY")}`;
 };
 
-export const currentWeekDates = () => {
+export const currentWeekDates = (useNextWeek = false) => {
   let monday = dayjs().startOf("week");
-
   if (dayjs().get("day") === 0) {
     monday = dayjs().add(1, "week").startOf("week");
   }
 
-  const currentDate =
-    dayjs().get("day") === 0
-      ? dayjs().add(1, "day").format("DD.MM.YYYY")
-      : dayjs().format("DD.MM.YYYY");
+  if (useNextWeek) {
+    monday = monday.add(1, "week");
+  }
+
+  const today = dayjs().get("day") === 0 ? dayjs().add(1, "day") : dayjs();
+  const currentDate = useNextWeek
+    ? monday.format("DD.MM.YYYY")
+    : today.format("DD.MM.YYYY");
 
   return {
     dates: [0, 1, 2, 3, 4, 5].map((index) => ({

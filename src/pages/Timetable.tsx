@@ -4,74 +4,63 @@ import Hint from "@/components/Hint";
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
 import Navbar from "@/components/Navbar";
-import DrawerSelect from "@/components/ui/drawer-select";
-import { Field } from "@/components/ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Wrapper from "@/components/Wrapper";
-import { courseOptions, facultyOptions, groupOptions } from "@/lib/constants";
+import { usePersistedState } from "@/hooks/usePersistedState";
+import { useTimetable } from "@/hooks/useTimetable";
+import { TIMETABLE_FILTER } from "@/lib/constants";
 import { mapTimetableDay } from "@/lib/mappers";
 import { currentWeekDates } from "@/lib/time";
+import type { TimetableFilterFormSchema } from "@/schemas/timetableFilterFormSchema";
 import {
-  filterCourseOptions,
-  filterGroupOptions,
-  findByValue,
-} from "@/lib/utils";
-import {
-  type TimetableFormSchema,
   formSchema,
+  type TimetableFormSchema,
 } from "@/schemas/timetableFormSchema";
-import { useCurrentUser } from "@/services/auth/query/use-auth";
-import { useGroupTimetable } from "@/services/timetable/query/use-timetable";
-import { mapTimetableRequest } from "@/services/timetable/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
-const defaultValues = {
-  faculty: undefined,
-  course: undefined,
-  group: undefined,
-};
 
 const Timetable = () => {
   const navigate = useNavigate();
-  const {
-    data: user,
-    isPending: isUserPending,
-    error: userError,
-  } = useCurrentUser();
-  const [currentWeek] = useState(currentWeekDates().dates);
-  const [selectedDay, setSelectedDay] = useState(
-    currentWeekDates().currentDate,
-  );
-
   const form = useForm<TimetableFormSchema>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: {
+      useNextWeek: false,
+    },
   });
-
-  const values = form.watch();
+  const { useNextWeek } = form.watch();
+  const currentWeek = useMemo(
+    () => currentWeekDates(useNextWeek),
+    [useNextWeek],
+  );
+  const [selectedDay, setSelectedDay] = useState(currentWeek.currentDate);
+  const [filters] = usePersistedState<TimetableFilterFormSchema | null>(
+    TIMETABLE_FILTER,
+    null,
+  );
 
   const {
     data: timetable,
-    isLoading: isTimetableLoading,
-    isFetched: isTimetableFetched,
-    error: timetableError,
-  } = useGroupTimetable(mapTimetableRequest(values));
+    isLoading,
+    isFetched,
+    isError,
+    error,
+  } = useTimetable(filters);
 
   useEffect(() => {
-    if (userError) {
-      console.error(userError);
-      toast.error("Ошибка получения данных о пользователе");
-    }
-
-    if (timetableError) {
-      console.error(timetableError);
+    if (isError) {
+      console.error(error);
       toast.error("Ошибка получения расписания");
     }
-  }, [userError, timetableError]);
+  }, [isError, error]);
+
+  useEffect(() => {
+    setSelectedDay(currentWeek.currentDate);
+  }, [currentWeek]);
 
   const timetableDay = useMemo(() => {
     if (!timetable) {
@@ -81,126 +70,50 @@ const Timetable = () => {
     return mapTimetableDay(selectedDay, timetable);
   }, [selectedDay, timetable]);
 
-  const onSubmit = form.handleSubmit((values) => {
-    console.log(values);
-  });
-
-  useEffect(() => {
-    if (user?.faculty) {
-      const label = findByValue(user.faculty, facultyOptions);
-      if (label) {
-        form.setValue("faculty", {
-          value: user.faculty,
-          label,
-        });
-      }
-    }
-    if (user?.course) {
-      const label = findByValue(user.course, courseOptions);
-      if (label) {
-        form.setValue("course", {
-          value: user.course,
-          label,
-        });
-      }
-    }
-    if (user?.group) {
-      const label = findByValue(user.group, groupOptions);
-      if (label) {
-        form.setValue("group", {
-          value: user.group,
-          label,
-        });
-      }
-    }
-  }, [user, form]);
-
-  if (isUserPending) {
+  if (isLoading) {
     <Wrapper>
       <Header title="Расписание" onClickLeft={() => navigate(-1)} />
       <Layout>
-        <div className="flex flex-grow items-center justify-center">
+        <div className="flex grow items-center justify-center">
           <Loader color="primary" />
         </div>
       </Layout>
     </Wrapper>;
   }
 
+  if (filters === null) {
+    return <Navigate to="/timetable/filter" replace />;
+  }
+
   return (
     <Wrapper>
       <Header title="Расписание" onClickLeft={() => navigate(-1)} />
       <Layout>
-        <div className="flex flex-grow flex-col space-y-6">
-          <form onSubmit={onSubmit} className="flex flex-col space-y-4">
-            <div className="grid grid-cols-3 items-center gap-2">
-              <Controller
-                name="faculty"
-                control={form.control}
-                render={({ field }) => (
-                  <Field>
-                    <DrawerSelect
-                      placeholder="Факультет"
-                      options={facultyOptions}
-                      selectedOption={form.getValues("faculty")}
-                      onChange={(value) => {
-                        form.resetField("course");
-                        form.resetField("group");
-                        field.onChange(value);
-                      }}
-                      displayedProperty="value"
-                    />
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="course"
-                control={form.control}
-                render={({ field }) => (
-                  <Field>
-                    <DrawerSelect
-                      placeholder="Курс"
-                      options={filterCourseOptions(values.faculty?.value)}
-                      selectedOption={form.getValues("course")}
-                      onChange={(value) => {
-                        form.resetField("group");
-                        field.onChange(value);
-                      }}
-                      disabled={!values.faculty}
-                      displayedProperty="value"
-                    />
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="group"
-                control={form.control}
-                render={({ field }) => (
-                  <Field>
-                    <DrawerSelect
-                      placeholder="Группа"
-                      options={filterGroupOptions(
-                        values.faculty?.value,
-                        values.course?.value,
-                      )}
-                      selectedOption={form.getValues("group")}
-                      onChange={field.onChange}
-                      disabled={!values.faculty || !values.course}
-                    />
-                  </Field>
-                )}
-              />
-            </div>
-
-            <Tabs defaultValue={selectedDay}>
+        <div className="flex grow flex-col space-y-6">
+          <form className="flex flex-col space-y-4">
+            <Controller
+              name="useNextWeek"
+              control={form.control}
+              render={({ field }) => (
+                <Field className="flex-row gap-2">
+                  <Switch
+                    id="useNextWeek"
+                    checked={form.getValues("useNextWeek")}
+                    onCheckedChange={(value) => field.onChange(value)}
+                  />
+                  <FieldLabel htmlFor="useNextWeek">
+                    Показать следующую неделю
+                  </FieldLabel>
+                </Field>
+              )}
+            />
+            <Tabs value={selectedDay} onValueChange={setSelectedDay}>
               <TabsList>
-                {currentWeek.map((date) => (
+                {currentWeek.dates.map((date) => (
                   <TabsTrigger
                     key={date.value}
                     value={date.value}
                     className="capitalize"
-                    onClick={() => setSelectedDay(date.value)}
                   >
                     {date.label}
                   </TabsTrigger>
@@ -209,22 +122,14 @@ const Timetable = () => {
             </Tabs>
           </form>
 
-          {isTimetableLoading && (
-            <div className="flex flex-grow flex-col items-center justify-center">
-              <Loader color="primary" />
-            </div>
-          )}
-
-          <div className="flex flex-grow flex-col space-y-4 overflow-y-scroll">
+          <div className="flex grow flex-col space-y-4 overflow-y-scroll">
             {timetableDay.length > 0 &&
               timetableDay.map((lesson, index) => (
                 <TimetableLessonCard key={index} lesson={lesson} variant="sm" />
               ))}
 
-            {timetableDay.length === 0 && isTimetableFetched && (
-              <Hint className="text-center">
-                В этот день у выбранной группы нет занятий
-              </Hint>
+            {timetableDay.length === 0 && isFetched && (
+              <Hint className="text-center">В этот день занятий нет</Hint>
             )}
           </div>
         </div>

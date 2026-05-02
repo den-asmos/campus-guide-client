@@ -1,9 +1,15 @@
-import type { Course, Faculty, Group } from "../user/types";
+import type { Course, Faculty, Group, User } from "../user/types";
 
-export type TimetableRequest = {
+export type GroupTimetableRequest = {
   faculty: Faculty;
   course: Course;
   group: Group;
+};
+
+export type LecturerTimetableRequest = {
+  firstName: User["firstName"];
+  lastName: User["lastName"];
+  middleName: User["middleName"];
 };
 
 export type TimetableDay = {
@@ -55,4 +61,16 @@ export const lessonTypeLabel: Record<LessonType, string> = {
   экз: "Экзамен",
   конс: "Консультация",
   другое: "Другое",
+};
+
+export enum TimetableMode {
+  group = "group",
+  lecturer = "lecturer",
+  classroom = "classroom",
+}
+
+export const timetableModeLabel: Record<TimetableMode, string> = {
+  group: "Расписание для группы",
+  lecturer: "Расписание для преподавателя",
+  classroom: "Расписание для аудитории",
 };

@@ -1,11 +1,16 @@
 import type { Classroom } from "@/services/classroom/types";
-import { NodeType, type DirectionNode } from "@/services/direction/types";
+import {
+  NodeType,
+  type DirectionNode,
+  type FloorGroup,
+} from "@/services/direction/types";
 import type { RequestError } from "@/services/fetcher";
 import {
   Course,
   Faculty,
   groupsByFacultiesAndCourses,
   Role,
+  type JwtPayload,
   type User,
 } from "@/services/user/types";
 import type { AxiosError } from "axios";
@@ -26,6 +31,30 @@ export const findByValue = <
   return options.find((option) => option.value === value)?.label;
 };
 
+export const decodeJwt = (token: string) => {
+  const part = token.split(".")[1];
+  if (typeof part !== "string") {
+    throw new Error("Invalid token");
+  }
+
+  const base64 = part.replace(/-/g, "+").replace(/_/g, "/");
+
+  const payload = decodeURIComponent(
+    atob(base64).replace(/(.)/g, (_, char) => {
+      return (
+        "%" +
+        (char as string)
+          .charCodeAt(0)
+          .toString(16)
+          .toUpperCase()
+          .padStart(2, "0")
+      );
+    }),
+  );
+
+  return JSON.parse(payload) as JwtPayload;
+};
+
 export const getErrorMessage = (error: AxiosError) => {
   const responseData = error.response?.data;
 
@@ -33,10 +62,7 @@ export const getErrorMessage = (error: AxiosError) => {
     return undefined;
   }
 
-  return (
-    (responseData as RequestError).message ||
-    (responseData as RequestError).error
-  );
+  return (responseData as RequestError).error.message;
 };
 
 export const filterCourseOptions = (faculty: Faculty | undefined) => {
@@ -58,7 +84,7 @@ export const filterGroupOptions = (
   );
 };
 
-export const compareObjects = <T extends Record<string, unknown>>(
+export const compareObjects = <T extends Record<string | number, unknown>>(
   first: T,
   second: T,
 ) => {
@@ -98,4 +124,19 @@ export const getLocationLabel = (location: DirectionNode) => {
   return location.type === NodeType.classroom
     ? location.title
     : location.description;
+};
+
+export const getDirectionLabel = (
+  origin: DirectionNode,
+  destination: DirectionNode,
+  group: FloorGroup,
+): string => {
+  if (
+    origin.type === destination.type &&
+    (origin.type === NodeType.elevator || origin.type === NodeType.stairs)
+  ) {
+    return `${group.fromFloor} этаж \u2192 ${group.toFloor} этаж`;
+  }
+
+  return `${getLocationLabel(origin)} \u2192 ${getLocationLabel(destination)}`;
 };

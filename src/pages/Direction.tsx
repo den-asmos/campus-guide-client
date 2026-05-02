@@ -7,7 +7,7 @@ import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import Wrapper from "@/components/Wrapper";
-import { getLocationLabel } from "@/lib/utils";
+import { getDirectionLabel } from "@/lib/utils";
 import { Floor } from "@/services/classroom/types";
 import { useDirection } from "@/services/direction/query/use-direction";
 import type { DirectionNode, FloorGroup } from "@/services/direction/types";
@@ -86,7 +86,7 @@ const Direction = () => {
       <Wrapper>
         <Header title="Маршрут" onClickLeft={() => navigate(-1)} />
         <Layout>
-          <div className="flex flex-grow items-center justify-center">
+          <div className="flex grow items-center justify-center">
             <Loader color="primary" />
           </div>
         </Layout>
@@ -98,10 +98,10 @@ const Direction = () => {
     <Wrapper className="h-screen">
       <Header title="Маршрут" onClickLeft={() => navigate(-1)} />
       <Layout className="relative overflow-hidden p-0">
-        {origin && destination && (
+        {origin && destination && currentGroup && (
           <div className="absolute top-4 z-10 w-full px-4">
             <Hint className="text-center">
-              {getLocationLabel(origin)} &#8594; {getLocationLabel(destination)}
+              {getDirectionLabel(origin, destination, currentGroup.group)}
             </Hint>
           </div>
         )}
@@ -164,7 +164,8 @@ const Direction = () => {
                     <polyline
                       key={currentGroup.group.path}
                       points={currentGroup.group.path}
-                      className="animate-pulse fill-none stroke-red-700 stroke-4"
+                      strokeDasharray={15}
+                      className="animate-pulse fill-none stroke-red-700 stroke-5"
                     />
                   )}
                 </DisplayedFloor>

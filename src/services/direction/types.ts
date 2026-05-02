@@ -16,9 +16,9 @@ export type DirectionNode = Classroom & {
 };
 
 export type FloorGroup = {
-  floor: Floor;
+  fromFloor: Floor;
+  toFloor: Floor;
   path: string;
-  nodes: DirectionNode[];
   origin: DirectionNode;
   destination: DirectionNode;
 };

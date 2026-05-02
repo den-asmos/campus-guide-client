@@ -16,6 +16,5 @@ export type SignUpRequest = {
 };
 
 export type AuthResponse = {
-  message: string;
   token: string;
 };

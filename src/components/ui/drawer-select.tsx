@@ -50,7 +50,7 @@ const DrawerSelect = <T extends DrawerSelectOption>({
         >
           <span
             className={cn(
-              "border-input line-clamp-1 inline-flex h-8.5 w-full min-w-0 truncate overflow-hidden rounded-md border bg-transparent py-1 pr-9 pl-2 text-left text-base whitespace-normal shadow-xs",
+              "border-input block h-8.5 w-full truncate rounded-md border bg-transparent py-1 pr-9 pl-2 text-left text-base shadow-xs",
               !selectedOption?.value && "text-muted-foreground",
             )}
           >

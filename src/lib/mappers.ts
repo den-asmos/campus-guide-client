@@ -1,49 +1,48 @@
 import type { TimetableDay, TimetableLesson } from "@/services/timetable/types";
 import { compareObjects } from "./utils";
 
+type LessonWithSubgroup = TimetableLesson & { subgroupName: string };
+
 export const mapTimetableDay = (
   selectedDay: string | undefined,
   timetable: TimetableDay[],
 ) => {
-  const timetableForSelectedDay = timetable.find(
-    (day) => day.date === selectedDay,
-  );
-
-  if (!timetableForSelectedDay?.groups) {
+  const day = timetable.find((day) => day.date === selectedDay);
+  if (!day?.groups.length) {
     return [];
   }
 
-  const result: Array<Array<TimetableLesson & { subgroupName: string }>> = [];
+  const lessonsMap = new Map<number, LessonWithSubgroup[]>();
+  const subgroups = day.groups.flatMap((g) => g.subgroups);
 
-  const allLessons = timetableForSelectedDay.groups.flatMap((group) =>
-    group.subgroups.flatMap((subgroup) =>
-      subgroup.lessons.map((lesson) => ({
+  for (const subgroup of subgroups) {
+    for (const lesson of subgroup.lessons) {
+      const lessonWithSubgroup = {
         ...lesson,
         subgroupName: subgroup.subgroupName,
-      })),
-    ),
-  );
+      };
 
-  allLessons.forEach((lesson) => {
-    const existingLessonIndex = result.findIndex((item) =>
-      item.some((element) => element.number === lesson.number),
-    );
+      const bucket = lessonsMap.get(lesson.number);
+      if (!bucket) {
+        lessonsMap.set(lesson.number, [lessonWithSubgroup]);
+        continue;
+      }
 
-    if (existingLessonIndex === -1) {
-      result.push([lesson]);
-    } else if (
-      !result[existingLessonIndex].every((item) => compareObjects(item, lesson))
-    ) {
-      result[existingLessonIndex].push(lesson);
-    } else {
-      result[existingLessonIndex] = result[existingLessonIndex].map((item) => ({
-        ...item,
-        subgroupName: item.subgroupName + `, ${lesson.subgroupName}`,
-      }));
+      const allSame = bucket.every(({ subgroupName: _, ...item }) =>
+        compareObjects(item, lesson),
+      );
+
+      if (allSame) {
+        for (const item of bucket) {
+          item.subgroupName += `, ${subgroup.subgroupName}`;
+        }
+      } else {
+        bucket.push(lessonWithSubgroup);
+      }
     }
-  });
+  }
 
-  result.sort((a, b) => a[0].number - b[0].number);
-
-  return result;
+  return Array.from(lessonsMap.entries())
+    .sort(([a], [b]) => a - b)
+    .map(([, lessons]) => lessons);
 };

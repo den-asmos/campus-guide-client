@@ -13,6 +13,7 @@ import Settings from "./pages/Settings";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Timetable from "./pages/Timetable";
+import TimetableFilter from "./pages/TimetableFilter";
 
 const App = () => {
   return (
@@ -22,7 +23,10 @@ const App = () => {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/timetable" element={<Timetable />} />
+        <Route path="/timetable">
+          <Route index element={<Timetable />} />
+          <Route path="filter" element={<TimetableFilter />} />
+        </Route>
         <Route path="/lesson" element={<Lesson />} />
         <Route path="/map" element={<Map />} />
         <Route path="/direction" element={<Direction />} />

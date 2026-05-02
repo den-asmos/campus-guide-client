@@ -125,13 +125,10 @@ const PasswordResetEmail = () => {
     <Wrapper>
       <Layout>
         {step === "email" ? (
-          <form
-            onSubmit={handleRequestCode}
-            className="flex flex-grow flex-col"
-          >
+          <form onSubmit={handleRequestCode} className="flex grow flex-col">
             <Logo />
-            <FieldGroup className="mb-6 flex flex-grow flex-col">
-              <div className="flex flex-grow flex-col justify-center space-y-5">
+            <FieldGroup className="mb-6 flex grow flex-col">
+              <div className="flex grow flex-col justify-center space-y-5">
                 <h1 className="text-center text-3xl font-semibold">
                   Сброс пароля
                 </h1>
@@ -164,10 +161,10 @@ const PasswordResetEmail = () => {
             </Bottom>
           </form>
         ) : (
-          <form onSubmit={handleVerifyCode} className="flex flex-grow flex-col">
+          <form onSubmit={handleVerifyCode} className="flex grow flex-col">
             <Logo />
-            <FieldGroup className="mb-6 flex flex-grow flex-col">
-              <div className="flex flex-grow flex-col justify-center space-y-5">
+            <FieldGroup className="mb-6 flex grow flex-col">
+              <div className="flex grow flex-col justify-center space-y-5">
                 <h1 className="text-center text-3xl font-semibold">
                   Сброс пароля
                 </h1>

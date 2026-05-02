@@ -1,7 +1,11 @@
 import { fetcher } from "@/services/fetcher";
-import type { TimetableDay, TimetableRequest } from "../types";
+import type {
+  GroupTimetableRequest,
+  LecturerTimetableRequest,
+  TimetableDay,
+} from "../types";
 
-export const groupTimetable = async (params: TimetableRequest | null) => {
+export const groupTimetable = async (params: GroupTimetableRequest | null) => {
   if (!params) {
     return Promise.reject(new Error("Invalid request params"));
   }
@@ -12,12 +16,25 @@ export const groupTimetable = async (params: TimetableRequest | null) => {
   return response.data;
 };
 
-export const lecturerTimetable = async () => {
-  const response = await fetcher.get<TimetableDay[]>("/api/timetable/lecturer");
+export const lecturerTimetable = async (
+  params: LecturerTimetableRequest | null,
+) => {
+  if (!params) {
+    return Promise.reject(new Error("Invalid request params"));
+  }
+
+  const response = await fetcher.get<TimetableDay[]>(
+    "/api/timetable/lecturer",
+    { params },
+  );
   return response.data;
 };
 
-export const classroomTimetable = async (classroom: string) => {
+export const classroomTimetable = async (classroom: string | null) => {
+  if (!classroom) {
+    return Promise.reject(new Error("Invalid request params"));
+  }
+
   const response = await fetcher.get<TimetableDay[]>(
     "/api/timetable/classroom",
     { params: { classroom } },

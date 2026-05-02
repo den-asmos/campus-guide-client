@@ -1,3 +1,4 @@
+import { TimetableMode, timetableModeLabel } from "@/services/timetable/types";
 import {
   courseLabel,
   facultyLabel,
@@ -37,6 +38,13 @@ export const groupOptions = Object.values(Group).map((group) => ({
   label: group,
 }));
 
+export const timetableModeOptions = Object.values(TimetableMode).map(
+  (mode) => ({
+    value: mode,
+    label: timetableModeLabel[mode],
+  }),
+);
+
 export const PASSWORD_RESET = {
   RESEND_COOLDOWN: 60,
   STEP_KEY: "passwordResetStep",
@@ -47,3 +55,5 @@ export const PASSWORD_RESET = {
 };
 
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+
+export const TIMETABLE_FILTER = "timetableFilter";

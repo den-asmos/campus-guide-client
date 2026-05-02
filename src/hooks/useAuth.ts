@@ -1,5 +1,5 @@
+import { decodeJwt } from "@/lib/utils";
 import type { JwtPayload } from "@/services/user/types";
-import { jwtDecode } from "jwt-decode";
 import { useCallback, useEffect, useState } from "react";
 
 export const useAuth = () => {
@@ -12,7 +12,7 @@ export const useAuth = () => {
 
     if (storedToken) {
       try {
-        const decoded = jwtDecode<JwtPayload>(storedToken);
+        const decoded = decodeJwt(storedToken);
         setDecodedToken(decoded);
         setToken(storedToken);
       } catch (error) {
@@ -39,7 +39,7 @@ export const useAuth = () => {
 
   const saveToken = useCallback((newToken: string) => {
     try {
-      const decoded = jwtDecode<JwtPayload>(newToken);
+      const decoded = decodeJwt(newToken);
       setDecodedToken(decoded);
       setToken(newToken);
       localStorage.setItem("token", newToken);

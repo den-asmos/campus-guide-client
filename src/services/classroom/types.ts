@@ -16,3 +16,9 @@ export enum Floor {
   sixth = 6,
   seventh = 7,
 }
+
+export type SearchClassroomResponse = {
+  classrooms: Classroom[];
+  total: number;
+  limit: number;
+};

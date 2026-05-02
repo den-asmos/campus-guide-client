@@ -61,8 +61,8 @@ const PasswordReset = () => {
     <Wrapper>
       <Header title="Сброс пароля" onClickLeft={() => navigate(-1)} />
       <Layout>
-        <form onSubmit={onSubmit} className="flex flex-grow flex-col">
-          <FieldGroup className="mb-6 flex flex-grow flex-col justify-center space-y-5">
+        <form onSubmit={onSubmit} className="flex grow flex-col">
+          <FieldGroup className="mb-6 flex grow flex-col justify-center space-y-5">
             <Controller
               name="password"
               control={form.control}
