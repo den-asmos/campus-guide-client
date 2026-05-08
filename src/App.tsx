@@ -1,45 +1,67 @@
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Direction from "./pages/Direction";
-import Home from "./pages/Home";
-import Lesson from "./pages/Lesson";
-import Map from "./pages/Map";
-import NotFound from "./pages/NotFound";
-import PasswordReset from "./pages/PasswordReset";
-import PasswordResetCode from "./pages/PasswordResetCode";
-import PasswordResetEmail from "./pages/PasswordResetEmail";
-import Profile from "./pages/Profile";
-import Search from "./pages/Search";
-import Settings from "./pages/Settings";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import Timetable from "./pages/Timetable";
-import TimetableFilter from "./pages/TimetableFilter";
+import { toast } from "sonner";
+import OfflineBanner from "./components/OfflineBanner";
+import useOnlineStatus from "./hooks/useOnlineStatus";
+
+const Direction = lazy(() => import("./pages/Direction"));
+const Home = lazy(() => import("./pages/Home"));
+const Lesson = lazy(() => import("./pages/Lesson"));
+const Map = lazy(() => import("./pages/Map"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const PasswordReset = lazy(() => import("./pages/PasswordReset"));
+const PasswordResetCode = lazy(() => import("./pages/PasswordResetCode"));
+const PasswordResetEmail = lazy(() => import("./pages/PasswordResetEmail"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Search = lazy(() => import("./pages/Search"));
+const Settings = lazy(() => import("./pages/Settings"));
+const SignIn = lazy(() => import("./pages/SignIn"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const Timetable = lazy(() => import("./pages/Timetable"));
+const TimetableFilter = lazy(() => import("./pages/TimetableFilter"));
 
 const App = () => {
+  const isOnline = useOnlineStatus();
+  const wasOffline = useRef(false);
+
+  useEffect(() => {
+    if (!isOnline) {
+      wasOffline.current = true;
+    } else if (wasOffline.current) {
+      toast.success("Подключение восстановлено");
+      wasOffline.current = false;
+    }
+  }, [isOnline]);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/timetable">
-          <Route index element={<Timetable />} />
-          <Route path="filter" element={<TimetableFilter />} />
-        </Route>
-        <Route path="/lesson" element={<Lesson />} />
-        <Route path="/map" element={<Map />} />
-        <Route path="/direction" element={<Direction />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/password-reset">
-          <Route index element={<PasswordReset />} />
-          <Route path="code" element={<PasswordResetCode />} />
-          <Route path="email" element={<PasswordResetEmail />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/timetable">
+              <Route index element={<Timetable />} />
+              <Route path="filter" element={<TimetableFilter />} />
+            </Route>
+            <Route path="/lesson" element={<Lesson />} />
+            <Route path="/map" element={<Map />} />
+            <Route path="/direction" element={<Direction />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/password-reset">
+              <Route index element={<PasswordReset />} />
+              <Route path="code" element={<PasswordResetCode />} />
+              <Route path="email" element={<PasswordResetEmail />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+      {!isOnline && <OfflineBanner />}
+    </>
   );
 };
 

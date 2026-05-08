@@ -1,7 +1,7 @@
 import type { TimetableDay, TimetableLesson } from "@/services/timetable/types";
 import { compareObjects } from "./utils";
 
-type LessonWithSubgroup = TimetableLesson & { subgroupName: string };
+export type LessonWithSubgroup = TimetableLesson & { subgroupName: string };
 
 export const mapTimetableDay = (
   selectedDay: string | undefined,

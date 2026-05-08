@@ -4,23 +4,25 @@ import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import Wrapper from "@/components/Wrapper";
+import type { LessonWithSubgroup } from "@/lib/mappers";
 import { useClassroom } from "@/services/classroom/query/use-classroom";
-import {
-  lessonTypeLabel,
-  type TimetableLesson,
-} from "@/services/timetable/types";
+import { lessonTypeLabel } from "@/services/timetable/types";
 import { MapPin } from "lucide-react";
+import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Lesson = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { subgroup } = location.state as {
-    subgroup: TimetableLesson & { subgroupName: string };
-  };
-  const { data: classroom, isPending } = useClassroom(subgroup.classroom);
+  const { subgroup } = location.state as { subgroup: LessonWithSubgroup };
+  const { data: classroom, isLoading } = useClassroom(subgroup.classroom);
 
-  if (isPending) {
+  const displayedClassroom = useMemo(
+    () => classroom?.title || subgroup.classroom || null,
+    [subgroup, classroom],
+  );
+
+  if (isLoading) {
     return (
       <Wrapper>
         <Header title="Пара" onClickLeft={() => navigate(-1)} />
@@ -43,14 +45,16 @@ const Lesson = () => {
           </h3>
 
           <div className="flex flex-col space-y-5">
-            {classroom && (
-              <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2">
+              {displayedClassroom && (
                 <h4 className="leading-none font-medium">
-                  Аудитория {classroom.title}
+                  Аудитория {displayedClassroom}
                 </h4>
+              )}
+              {classroom && (
                 <p className="text-sm leading-none">{classroom.description}</p>
-              </div>
-            )}
+              )}
+            </div>
 
             {subgroup.lecturer && (
               <div className="flex flex-col space-y-2">
@@ -80,7 +84,7 @@ const Lesson = () => {
           </div>
         </div>
 
-        {subgroup.classroom !== null && classroom && (
+        {classroom && (
           <Bottom>
             <Button
               onClick={() =>

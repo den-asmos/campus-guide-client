@@ -1,17 +1,17 @@
 import { Card } from "@/components/ui/card";
-import type { TimetableLesson } from "@/services/timetable/types";
+import type { LessonWithSubgroup } from "@/lib/mappers";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
-  lesson: Array<TimetableLesson & { subgroupName: string }>;
+  lesson: Array<LessonWithSubgroup>;
   variant?: "md" | "sm";
 };
 
 const TimetableLessonCard = ({ lesson, variant = "md" }: Props) => {
   const navigate = useNavigate();
 
-  const onClick = (subgroup: TimetableLesson & { subgroupName: string }) => {
+  const onClick = (subgroup: LessonWithSubgroup) => {
     navigate("/lesson", {
       state: { subgroup },
     });

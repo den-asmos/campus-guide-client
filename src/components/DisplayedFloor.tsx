@@ -1,12 +1,14 @@
-import Floor1SVG from "@/assets/floor-1.svg?react";
-import Floor2SVG from "@/assets/floor-2.svg?react";
-import Floor3SVG from "@/assets/floor-3.svg?react";
-import Floor4SVG from "@/assets/floor-4.svg?react";
-import Floor5SVG from "@/assets/floor-5.svg?react";
-import Floor6SVG from "@/assets/floor-6.svg?react";
-import Floor7SVG from "@/assets/floor-7.svg?react";
 import { Floor } from "@/services/classroom/types";
 import type { PropsWithChildren, Ref } from "react";
+import { lazy, Suspense } from "react";
+
+const Floor1SVG = lazy(() => import("@/assets/floor-1.svg?react"));
+const Floor2SVG = lazy(() => import("@/assets/floor-2.svg?react"));
+const Floor3SVG = lazy(() => import("@/assets/floor-3.svg?react"));
+const Floor4SVG = lazy(() => import("@/assets/floor-4.svg?react"));
+const Floor5SVG = lazy(() => import("@/assets/floor-5.svg?react"));
+const Floor6SVG = lazy(() => import("@/assets/floor-6.svg?react"));
+const Floor7SVG = lazy(() => import("@/assets/floor-7.svg?react"));
 
 type Props = PropsWithChildren<{
   floor: Floor;
@@ -24,6 +26,22 @@ const viewBoxes: Record<Floor, string> = {
   7: "0 0 676 2415",
 };
 
+const FloorComponent = ({
+  floor,
+  ref,
+}: {
+  floor: Floor;
+  ref: Ref<SVGSVGElement>;
+}) => {
+  if (floor === Floor.seventh) return <Floor7SVG ref={ref} />;
+  if (floor === Floor.sixth) return <Floor6SVG ref={ref} />;
+  if (floor === Floor.fifth) return <Floor5SVG ref={ref} />;
+  if (floor === Floor.fourth) return <Floor4SVG ref={ref} />;
+  if (floor === Floor.third) return <Floor3SVG ref={ref} />;
+  if (floor === Floor.second) return <Floor2SVG ref={ref} />;
+  return <Floor1SVG ref={ref} />;
+};
+
 const DisplayedFloor = ({ floor, ref, onClick, children }: Props) => {
   return (
     <svg
@@ -32,21 +50,9 @@ const DisplayedFloor = ({ floor, ref, onClick, children }: Props) => {
       preserveAspectRatio="xMidYMid meet"
       onClick={onClick}
     >
-      {floor === Floor.seventh ? (
-        <Floor7SVG ref={ref} />
-      ) : floor === Floor.sixth ? (
-        <Floor6SVG ref={ref} />
-      ) : floor === Floor.fifth ? (
-        <Floor5SVG ref={ref} />
-      ) : floor === Floor.fourth ? (
-        <Floor4SVG ref={ref} />
-      ) : floor === Floor.third ? (
-        <Floor3SVG ref={ref} />
-      ) : floor === Floor.second ? (
-        <Floor2SVG ref={ref} />
-      ) : (
-        <Floor1SVG ref={ref} />
-      )}
+      <Suspense fallback={null}>
+        <FloorComponent floor={floor} ref={ref} />
+      </Suspense>
       {children}
     </svg>
   );

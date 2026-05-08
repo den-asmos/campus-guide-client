@@ -1,73 +1,81 @@
-# React + TypeScript + Vite
+# Navigator — Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 single-page application for the university Campus Guide. Provides indoor navigation, timetable lookup, and classroom search for VSU students.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Category      | Library                                         |
+| ------------- | ----------------------------------------------- |
+| Framework     | React 19 + TypeScript                           |
+| Build tool    | Vite 7                                          |
+| Routing       | React Router v7                                 |
+| Server state  | TanStack React Query v5                         |
+| HTTP client   | Axios                                           |
+| Forms         | React Hook Form + Zod                           |
+| UI primitives | shadcn/ui (Radix UI, New York style)            |
+| Styling       | Tailwind CSS v4                                 |
+| Icons         | Lucide React                                    |
+| Floor maps    | SVG via vite-plugin-svgr + react-zoom-pan-pinch |
+| Toasts        | Sonner                                          |
+| Input masking | Maskito                                         |
 
-## React Compiler
+## Project Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```
+src/
+├── assets/          # SVG floor maps (floor-1.svg … floor-7.svg)
+├── components/
+│   ├── ui/          # shadcn/ui primitives
+│   └── ...          # App-specific components (layout, floor map, cards, filters)
+├── hooks/           # useAuth, usePersistedState, useDebounce, useTimetable, useGreeting
+├── pages/           # One file per route/screen
+├── schemas/         # Zod validation schemas for forms
+└── services/
+    ├── fetcher.ts   # Axios instance (reads VITE_BASE_URL)
+    └── <domain>/
+        ├── api/     # API call functions
+        ├── query/   # React Query hooks
+        └── types.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+### Prerequisites
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+- Node.js 20+
+- The [server](../server) running locally (default: `http://localhost:7070`)
+
+### Install
+
+```bash
+npm install
 ```
+
+### Environment
+
+Create `client/.env`:
+
+```env
+VITE_BASE_URL=http://localhost:7070
+```
+
+### Run
+
+```bash
+npm run dev       # Dev server with HMR on http://localhost:5173
+npm run build     # Type-check + production bundle → dist/
+npm run preview   # Serve the production build locally
+npm run lint      # ESLint
+npm run format    # Prettier
+```
+
+The Vite dev server proxies all `/api/*` requests to the backend (`vite.config.ts`), so no CORS setup is needed during development.
+
+## Features
+
+- **Indoor navigation** — interactive floor maps with zoom/pan, path highlighting across floors
+- **Timetable** — search lessons by group, lecturer, or classroom
+- **Classroom search** — filter and locate rooms by number, type, or equipment
+- **Authentication** — JWT-based login/register with password reset via email
+- **Profile** — avatar upload (Cloudinary), account settings
+- **PWA** — installable via `vite-plugin-pwa`
