@@ -27,6 +27,7 @@ import { useCurrentUser } from "@/services/auth/query/use-auth";
 import { TimetableMode, timetableModeLabel } from "@/services/timetable/types";
 import { Role } from "@/services/user/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronLeft } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -143,7 +144,11 @@ const TimetableFilter = () => {
 
   if (isUserPending) {
     <Wrapper>
-      <Header title="Расписание" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Расписание"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout>
         <div className="flex grow items-center justify-center">
           <Loader color="primary" />
@@ -154,7 +159,11 @@ const TimetableFilter = () => {
 
   return (
     <Wrapper>
-      <Header title="Расписание" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Расписание"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout>
         <div className="flex grow flex-col space-y-6">
           <form onSubmit={onSubmit} className="flex grow flex-col">

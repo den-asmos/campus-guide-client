@@ -7,13 +7,19 @@ import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import Wrapper from "@/components/Wrapper";
-import { getDirectionLabel } from "@/lib/utils";
+import { getDirectionLabel, getInitialTransform } from "@/lib/utils";
 import { Floor } from "@/services/classroom/types";
 import { useDirection } from "@/services/direction/query/use-direction";
 import type { DirectionNode, FloorGroup } from "@/services/direction/types";
+import { ChevronLeft } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import {
+  TransformComponent,
+  TransformWrapper,
+  type ReactZoomPanPinchRef,
+} from "react-zoom-pan-pinch";
+import { INITIAL_SCALE } from "@/lib/constants";
 
 const Direction = () => {
   const navigate = useNavigate();
@@ -31,6 +37,7 @@ const Direction = () => {
   } | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<Floor>(Floor.first);
   const svgRef = useRef<SVGSVGElement>(null);
+  const transformRef = useRef<ReactZoomPanPinchRef>(null);
   const { data: direction, isPending: isDirectionPending } =
     useDirection(locations);
 
@@ -60,6 +67,26 @@ const Direction = () => {
     }
   }, [direction]);
 
+  useEffect(() => {
+    if (!origin || !transformRef.current) {
+      return;
+    }
+
+    const wrapper = transformRef.current.instance.wrapperComponent;
+    if (!wrapper) {
+      return;
+    }
+
+    const [x, y] = getInitialTransform(
+      wrapper,
+      selectedFloor,
+      origin.latitude,
+      origin.longitude,
+    );
+
+    transformRef.current.setTransform(x, y, INITIAL_SCALE, 0);
+  }, [origin, selectedFloor]);
+
   const hasNextGroup = () => {
     return (
       currentGroup?.index !== undefined &&
@@ -84,7 +111,11 @@ const Direction = () => {
   if (isDirectionPending) {
     return (
       <Wrapper>
-        <Header title="Маршрут" onClickLeft={() => navigate(-1)} />
+        <Header
+          title="Маршрут"
+          leftIcon={<ChevronLeft />}
+          onClickLeft={() => navigate(-1)}
+        />
         <Layout>
           <div className="flex grow items-center justify-center">
             <Loader color="primary" />
@@ -96,7 +127,11 @@ const Direction = () => {
 
   return (
     <Wrapper className="h-screen">
-      <Header title="Маршрут" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Маршрут"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout className="relative overflow-hidden p-0">
         {origin && destination && currentGroup && (
           <div className="absolute top-4 z-10 w-full px-4">
@@ -107,13 +142,13 @@ const Direction = () => {
         )}
 
         <TransformWrapper
-          initialScale={2}
+          ref={transformRef}
+          initialScale={INITIAL_SCALE}
           minScale={1}
           maxScale={5}
           wheel={{ step: 0.4 }}
           smooth={true}
           limitToBounds={false}
-          centerOnInit={true}
           key={selectedFloor}
         >
           {() => (

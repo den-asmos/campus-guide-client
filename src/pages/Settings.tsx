@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Layout from "@/components/Layout";
 import Wrapper from "@/components/Wrapper";
+import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
@@ -8,7 +9,11 @@ const Settings = () => {
 
   return (
     <Wrapper>
-      <Header title="Настройки" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Настройки"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout>
         <div>Settings</div>
       </Layout>

@@ -11,7 +11,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { formSchema, type SearchFormSchema } from "@/schemas/searchFormSchema";
 import { useSearchClassroom } from "@/services/classroom/query/use-classroom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SearchIcon } from "lucide-react";
+import { ChevronLeft, SearchIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -34,7 +34,11 @@ const Search = () => {
 
   return (
     <Wrapper>
-      <Header title="Поиск" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Поиск"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout>
         <form>
           <FieldGroup className="mb-6 flex grow flex-col">

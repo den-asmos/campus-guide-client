@@ -16,14 +16,19 @@ import {
 } from "@/components/ui/drawer";
 import { inputVariants } from "@/components/ui/variants";
 import Wrapper from "@/components/Wrapper";
-import { cn, findClassroom } from "@/lib/utils";
+import { cn, findClassroom, getInitialTransform } from "@/lib/utils";
 import { useFloorClassrooms } from "@/services/classroom/query/use-classroom";
 import { Floor, type Classroom } from "@/services/classroom/types";
-import { ArrowDownUp, MapPin, RouteIcon } from "lucide-react";
+import { ArrowDownUp, ChevronLeft, MapPin, RouteIcon } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import {
+  TransformComponent,
+  TransformWrapper,
+  type ReactZoomPanPinchRef,
+} from "react-zoom-pan-pinch";
 import { toast } from "sonner";
+import { INITIAL_SCALE } from "@/lib/constants";
 
 type MapPin = {
   x: number;
@@ -35,7 +40,7 @@ type SelectionMode = "destination" | "origin" | null;
 
 const Map = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedLocation, setSelectedLocation] = useState<Classroom | null>(
     null,
   );
@@ -45,10 +50,18 @@ const Map = () => {
   const [selectionMode, setSelectionMode] = useState<SelectionMode>(null);
   const [pin, setPin] = useState<MapPin | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const transformRef = useRef<ReactZoomPanPinchRef>(null);
+  const selectedFloorRef = useRef(selectedFloor);
+  selectedFloorRef.current = selectedFloor;
+  const [pendingCenter, setPendingCenter] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [isLocationDrawerOpen, setIsLocationDrawerOpen] = useState(false);
   const [isDirectionDrawerOpen, setIsDirectionDrawerOpen] = useState(false);
   const { data: floorClassrooms, isLoading: isFloorClassroomsLoading } =
     useFloorClassrooms(selectedFloor);
+  const isManualFloorOverride = useRef(false);
 
   const handleMapClick = useCallback(
     (event: React.MouseEvent<SVGSVGElement>) => {
@@ -63,17 +76,10 @@ const Map = () => {
         }
 
         const rect = location.querySelector("rect");
-
         if (!rect) {
           return;
         }
-
-        const x = rect.x.baseVal.value + rect.width.baseVal.value / 2 - 15;
-        const y = rect.y.baseVal.value + rect.height.baseVal.value / 2 - 15;
-        console.log(location.id, x, y);
-
         const classroom = findClassroom(location.id, floorClassrooms);
-
         if (!classroom) {
           return;
         }
@@ -82,8 +88,6 @@ const Map = () => {
         setPin({
           x: classroom.latitude,
           y: classroom.longitude,
-          // x,
-          // y,
           classroomId: target.id,
         });
       }
@@ -175,16 +179,28 @@ const Map = () => {
   };
 
   useEffect(() => {
-    const floor = searchParams.get("floor");
-    if (floor) {
-      setSelectedFloor(parseInt(floor));
-    }
     const classroomId = searchParams.get("classroom");
+    if (!classroomId) {
+      isManualFloorOverride.current = false;
+      setPin(null);
+      setSelectedLocation(null);
+      return;
+    }
+
+    if (isManualFloorOverride.current) {
+      return;
+    }
+
+    const floor = searchParams.get("floor");
+    const parsedFloor = floor ? (parseInt(floor) as Floor) : null;
+    if (parsedFloor) {
+      setSelectedFloor(parsedFloor);
+    }
+
     const classroom = findClassroom(
       `location-id-${classroomId}`,
       floorClassrooms,
     );
-
     if (classroom) {
       setSelectedLocation(classroom);
       setPin({
@@ -192,23 +208,70 @@ const Map = () => {
         y: classroom.longitude,
         classroomId: classroom.title,
       });
+      setPendingCenter({ x: classroom.latitude, y: classroom.longitude });
     }
   }, [searchParams, floorClassrooms]);
 
   useEffect(() => {
-    if (selectedLocation) {
-      setIsLocationDrawerOpen(true);
+    if (!pendingCenter) {
+      return;
     }
+    const wrapper = transformRef.current?.instance.wrapperComponent;
+    if (!wrapper) {
+      return;
+    }
+
+    const [x, y] = getInitialTransform(
+      wrapper,
+      selectedFloor,
+      pendingCenter.x,
+      pendingCenter.y,
+    );
+    transformRef.current!.setTransform(x, y, INITIAL_SCALE, 0);
+    setPendingCenter(null);
+  }, [pendingCenter, selectedFloor]);
+
+  useEffect(() => {
+    setIsLocationDrawerOpen(!!selectedLocation);
   }, [selectedLocation]);
+
+  const handleMapInit = useCallback(
+    (ref: ReactZoomPanPinchRef) => {
+      const wrapper = ref.instance.wrapperComponent;
+      if (!wrapper) {
+        return;
+      }
+      const { clientWidth, clientHeight } = wrapper;
+      if (!clientWidth || !clientHeight) {
+        return;
+      }
+
+      const target = pendingCenter;
+      const [x, y] = getInitialTransform(
+        wrapper,
+        selectedFloor,
+        target?.x,
+        target?.y,
+      );
+      ref.setTransform(x, y, INITIAL_SCALE, 0);
+    },
+    [selectedFloor, pendingCenter],
+  );
 
   const removePin = () => {
     setPin(null);
+    setSelectedLocation(null);
+    setSearchParams({}, { replace: true });
   };
 
   if (isFloorClassroomsLoading) {
     return (
       <Wrapper>
-        <Header title="Карта" onClickLeft={() => navigate(-1)} />
+        <Header
+          title="Карта"
+          leftIcon={<ChevronLeft />}
+          onClickLeft={() => navigate(-1)}
+        />
         <Layout>
           <div className="flex grow items-center justify-center">
             <Loader color="primary" />
@@ -220,7 +283,11 @@ const Map = () => {
 
   return (
     <Wrapper className="h-screen">
-      <Header title="Карта" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Карта"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout className="relative overflow-hidden p-0">
         {selectionMode && (
           <div className="absolute top-4 z-10 w-full px-4">
@@ -233,14 +300,15 @@ const Map = () => {
         )}
 
         <TransformWrapper
-          initialScale={2}
+          ref={transformRef}
+          initialScale={INITIAL_SCALE}
           minScale={1}
           maxScale={5}
           wheel={{ step: 0.4 }}
           smooth={true}
           limitToBounds={false}
-          centerOnInit={true}
           key={selectedFloor}
+          onInit={handleMapInit}
         >
           {() => (
             <>
@@ -252,8 +320,9 @@ const Map = () => {
                       key={floor}
                       variant={selectedFloor === floor ? "outline" : "default"}
                       onClick={() => {
+                        isManualFloorOverride.current = true;
                         setSelectedFloor(floor);
-                        setPin(null);
+                        removePin();
                       }}
                     >
                       {floor}

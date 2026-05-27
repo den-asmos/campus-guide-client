@@ -57,3 +57,5 @@ export const PASSWORD_RESET = {
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 export const TIMETABLE_FILTER = "timetableFilter";
+
+export const INITIAL_SCALE = 2;

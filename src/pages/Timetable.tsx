@@ -19,6 +19,7 @@ import {
   type TimetableFormSchema,
 } from "@/schemas/timetableFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronLeft } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -72,7 +73,11 @@ const Timetable = () => {
 
   if (isLoading) {
     <Wrapper>
-      <Header title="Расписание" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Расписание"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout>
         <div className="flex grow items-center justify-center">
           <Loader color="primary" />
@@ -87,7 +92,11 @@ const Timetable = () => {
 
   return (
     <Wrapper>
-      <Header title="Расписание" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Расписание"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout>
         <div className="flex grow flex-col space-y-6">
           <form className="flex flex-col space-y-4">

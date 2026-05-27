@@ -16,7 +16,7 @@ type Props = PropsWithChildren<{
   onClick?: (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
 }>;
 
-const viewBoxes: Record<Floor, string> = {
+export const viewBoxes: Record<Floor, string> = {
   1: "0 0 2664 4981",
   2: "0 0 2632 4287",
   3: "0 0 640 3406",

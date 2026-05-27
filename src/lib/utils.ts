@@ -1,4 +1,4 @@
-import type { Classroom } from "@/services/classroom/types";
+import type { Classroom, Floor } from "@/services/classroom/types";
 import {
   NodeType,
   type DirectionNode,
@@ -16,7 +16,8 @@ import {
 import type { AxiosError } from "axios";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { courseOptions, groupOptions } from "./constants";
+import { courseOptions, groupOptions, INITIAL_SCALE } from "./constants";
+import { viewBoxes } from "@/components/DisplayedFloor";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -139,4 +140,28 @@ export const getDirectionLabel = (
   }
 
   return `${getLocationLabel(origin)} \u2192 ${getLocationLabel(destination)}`;
+};
+
+export const getInitialTransform = (
+  wrapper: HTMLElement,
+  floor: Floor,
+  svgX?: number,
+  svgY?: number,
+): [number, number] => {
+  const { clientWidth, clientHeight } = wrapper;
+  const [, , vbWidth, vbHeight] = viewBoxes[floor].split(" ").map(Number);
+  const svgScale = Math.min(clientWidth / vbWidth, clientHeight / vbHeight);
+  const offsetX = (clientWidth - vbWidth * svgScale) / 2;
+  const offsetY = (clientHeight - vbHeight * svgScale) / 2;
+
+  if (svgX !== undefined && svgY !== undefined) {
+    const contentX = offsetX + svgX * svgScale;
+    const contentY = offsetY + svgY * svgScale;
+    return [
+      clientWidth / 2 - contentX * INITIAL_SCALE,
+      clientHeight / 2 - contentY * INITIAL_SCALE,
+    ];
+  }
+
+  return [(clientWidth / 2) * (1 - INITIAL_SCALE), -offsetY * INITIAL_SCALE];
 };

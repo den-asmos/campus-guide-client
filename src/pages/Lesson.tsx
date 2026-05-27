@@ -7,7 +7,7 @@ import Wrapper from "@/components/Wrapper";
 import type { LessonWithSubgroup } from "@/lib/mappers";
 import { useClassroom } from "@/services/classroom/query/use-classroom";
 import { lessonTypeLabel } from "@/services/timetable/types";
-import { MapPin } from "lucide-react";
+import { ChevronLeft, MapPin } from "lucide-react";
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -25,7 +25,11 @@ const Lesson = () => {
   if (isLoading) {
     return (
       <Wrapper>
-        <Header title="Пара" onClickLeft={() => navigate(-1)} />
+        <Header
+          title="Пара"
+          leftIcon={<ChevronLeft />}
+          onClickLeft={() => navigate(-1)}
+        />
         <Layout>
           <div className="flex grow items-center justify-center">
             <Loader color="primary" />
@@ -37,7 +41,11 @@ const Lesson = () => {
 
   return (
     <Wrapper>
-      <Header title="Пара" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Пара"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout>
         <div className="flex grow flex-col space-y-8">
           <h3 className="text-xl leading-5 font-semibold text-wrap">

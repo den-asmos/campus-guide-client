@@ -13,7 +13,7 @@ import { mapTimetableDay } from "@/lib/mappers";
 import { currentDate, currentWeek, isLessonInFuture } from "@/lib/time";
 import { useCurrentUser } from "@/services/auth/query/use-auth";
 import { Role } from "@/services/user/types";
-import { Calendar, Menu, Settings } from "lucide-react";
+import { Calendar, Menu } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -82,8 +82,6 @@ const Home = () => {
   return (
     <Wrapper>
       <Header
-        leftIcon={<Settings />}
-        onClickLeft={() => navigate("/settings")}
         rightIcon={
           <UserAvatar
             avatar={user.avatar}

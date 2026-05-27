@@ -41,7 +41,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { maskitoStringifyDate } from "@maskito/kit";
 import { useMaskito } from "@maskito/react";
 import type { AxiosError } from "axios";
-import { LogOut } from "lucide-react";
+import { ChevronLeft, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -201,6 +201,7 @@ const Profile = () => {
       <Wrapper>
         <Header
           title="Профиль"
+          leftIcon={<ChevronLeft />}
           onClickLeft={() => navigate(-1)}
           rightIcon={
             <Dialog
@@ -231,6 +232,7 @@ const Profile = () => {
     <Wrapper>
       <Header
         title="Профиль"
+        leftIcon={<ChevronLeft />}
         onClickLeft={() => navigate(-1)}
         rightIcon={
           <Dialog

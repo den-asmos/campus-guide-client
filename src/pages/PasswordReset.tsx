@@ -22,6 +22,7 @@ import { useSignOut } from "@/services/auth/query/use-auth";
 import { useResetPassword } from "@/services/user/query/use-password-reset";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
+import { ChevronLeft } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -59,7 +60,11 @@ const PasswordReset = () => {
 
   return (
     <Wrapper>
-      <Header title="Сброс пароля" onClickLeft={() => navigate(-1)} />
+      <Header
+        title="Сброс пароля"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={() => navigate(-1)}
+      />
       <Layout>
         <form onSubmit={onSubmit} className="flex grow flex-col">
           <FieldGroup className="mb-6 flex grow flex-col justify-center space-y-5">

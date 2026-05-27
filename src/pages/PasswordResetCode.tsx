@@ -27,6 +27,7 @@ import {
 } from "@/services/user/query/use-password-reset";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
+import { ChevronLeft } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -144,7 +145,11 @@ const PasswordResetCode = () => {
   if (isUserPending) {
     return (
       <Wrapper>
-        <Header title="Сброс пароля" onClickLeft={navigateBack} />
+        <Header
+          title="Сброс пароля"
+          leftIcon={<ChevronLeft />}
+          onClickLeft={navigateBack}
+        />
 
         <div className="flex grow items-center justify-center">
           <Loader color="primary" />
@@ -159,7 +164,11 @@ const PasswordResetCode = () => {
 
   return (
     <Wrapper>
-      <Header title="Сброс пароля" onClickLeft={navigateBack} />
+      <Header
+        title="Сброс пароля"
+        leftIcon={<ChevronLeft />}
+        onClickLeft={navigateBack}
+      />
       <Layout>
         <form onSubmit={handleVerifyCode} className="flex grow flex-col">
           <FieldGroup className="mb-6 flex grow flex-col">
