@@ -1,0 +1,11 @@
+pre-commit:
+  jobs:
+    - name: lint
+      glob: "*.{ts,tsx}"
+      run: npx eslint --fix {staged_files}
+      stage_fixed: true
+
+    - name: format
+      glob: "*.{ts,tsx,json,css,md}"
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
