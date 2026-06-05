@@ -7,7 +7,7 @@ type Props = PropsWithChildren<{
 
 const Bottom = ({ children, className }: Props) => {
   return (
-    <div className={cn("sticky bottom-4 z-20 space-y-2", className)}>
+    <div className={cn("sticky bottom-6 z-20 space-y-2", className)}>
       {children}
     </div>
   );

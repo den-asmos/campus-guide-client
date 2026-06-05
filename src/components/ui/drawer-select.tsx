@@ -72,7 +72,7 @@ const DrawerSelect = <T extends DrawerSelectOption>({
             <label
               id={option.label}
               key={option.label}
-              className="flex items-center space-x-2 px-4 py-2"
+              className="flex items-center space-x-2 px-6 py-2"
             >
               <Checkbox
                 id={option.label}

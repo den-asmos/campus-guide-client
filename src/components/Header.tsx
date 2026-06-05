@@ -16,11 +16,11 @@ const Header = ({
   rightIcon,
 }: Props) => {
   return (
-    <header className="bg-background sticky top-0 z-50 flex h-13 items-center px-4 shadow">
+    <header className="bg-background sticky top-0 z-50 flex h-17 items-center px-6 shadow">
       <button onClick={onClickLeft} className="flex-1">
         {leftIcon}
       </button>
-      <p className="line-clamp-1 flex-3 truncate px-4 text-center text-xl leading-none">
+      <p className="line-clamp-1 flex-3 truncate px-6 text-center text-xl leading-none">
         {title}
       </p>
       <button onClick={onClickRight} className="flex flex-1 justify-end">

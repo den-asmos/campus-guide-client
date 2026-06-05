@@ -134,7 +134,7 @@ const Direction = () => {
       />
       <Layout className="relative overflow-hidden p-0">
         {origin && destination && currentGroup && (
-          <div className="absolute top-4 z-10 w-full px-4">
+          <div className="absolute top-6 z-10 w-full px-6">
             <Hint className="text-center">
               {getDirectionLabel(origin, destination, currentGroup.group)}
             </Hint>
@@ -210,7 +210,7 @@ const Direction = () => {
         </TransformWrapper>
 
         {hasNextGroup() && (
-          <Bottom className="px-4">
+          <Bottom className="px-6">
             <Button block onClick={setNextGroup}>
               Дальше
             </Button>

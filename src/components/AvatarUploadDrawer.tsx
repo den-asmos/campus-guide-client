@@ -54,13 +54,13 @@ const AvatarUploadDrawer = ({
     <Drawer open={isOpen} onOpenChange={handleClose}>
       <DrawerContent>
         <form>
-          <DrawerHeader className="items-start px-4">
+          <DrawerHeader className="items-start px-6">
             <DrawerTitle>Аватар</DrawerTitle>
             <DrawerDescription>
               Выберите файл на вашем устройстве
             </DrawerDescription>
           </DrawerHeader>
-          <FieldGroup className="px-4 pt-2">
+          <FieldGroup className="px-6 pt-2">
             {avatar ? (
               <div className="flex items-center justify-center">
                 <div className="aspect-square w-40 overflow-hidden rounded-full">

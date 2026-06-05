@@ -290,7 +290,7 @@ const Map = () => {
       />
       <Layout className="relative overflow-hidden p-0">
         {selectionMode && (
-          <div className="absolute top-4 z-10 w-full px-4">
+          <div className="absolute top-6 z-10 w-full px-6">
             <Hint className="text-center">
               {selectionMode === "origin"
                 ? "Выберите точку отправления"
@@ -312,7 +312,7 @@ const Map = () => {
         >
           {() => (
             <>
-              <div className="fixed top-1/2 right-0 z-20 flex -translate-y-1/2 flex-col space-y-3 rounded-sm bg-white/70 px-4 py-2">
+              <div className="fixed top-1/2 right-0 z-20 flex -translate-y-1/2 flex-col space-y-3 rounded-sm bg-white/70 px-6 py-2">
                 {Object.values(Floor)
                   .filter((floor) => typeof floor === "number")
                   .map((floor) => (
@@ -369,7 +369,7 @@ const Map = () => {
         onOpenChange={setIsLocationDrawerOpen}
       >
         <DrawerContent>
-          <DrawerHeader className="items-start px-4">
+          <DrawerHeader className="items-start px-6">
             <DrawerTitle>{selectedLocation?.title}</DrawerTitle>
             <DrawerDescription className="text-left">
               {selectedLocation?.description}
@@ -401,13 +401,13 @@ const Map = () => {
 
       <Drawer open={isDirectionDrawerOpen}>
         <DrawerContent>
-          <DrawerHeader className="items-start px-4">
+          <DrawerHeader className="items-start px-6">
             <DrawerTitle>Маршрут</DrawerTitle>
             <DrawerDescription className="text-left">
               Для построения маршрута выберите точки отправления и назначения
             </DrawerDescription>
           </DrawerHeader>
-          <div className="flex flex-col items-center space-y-2 px-4 py-2">
+          <div className="flex flex-col items-center space-y-2 px-6 py-2">
             <p
               onClick={handleRepickOrigin}
               className={cn(
