@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="bg-background sticky bottom-0 z-20 flex h-17 w-full items-center justify-around px-6">
+    <nav className="bg-background sticky bottom-0 z-20 flex h-17 w-full items-center justify-around px-6 pb-4">
       <NavLink
         to="/"
         className={({ isActive }) => cn(isActive && "text-button-primary")}

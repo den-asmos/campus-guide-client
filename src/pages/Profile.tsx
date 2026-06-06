@@ -126,9 +126,9 @@ const Profile = () => {
     }
 
     try {
-      const response = await deleteAvatar();
+      await deleteAvatar();
       await refetchUser();
-      toast.success(response.message);
+      toast.success("Аватар удалён");
       setIsAvatarUploadDrawerOpen(false);
     } catch (error) {
       console.error(error);

@@ -369,9 +369,9 @@ const Map = () => {
         onOpenChange={setIsLocationDrawerOpen}
       >
         <DrawerContent>
-          <DrawerHeader className="items-start px-6">
+          <DrawerHeader>
             <DrawerTitle>{selectedLocation?.title}</DrawerTitle>
-            <DrawerDescription className="text-left">
+            <DrawerDescription>
               {selectedLocation?.description}
             </DrawerDescription>
           </DrawerHeader>
@@ -401,13 +401,13 @@ const Map = () => {
 
       <Drawer open={isDirectionDrawerOpen}>
         <DrawerContent>
-          <DrawerHeader className="items-start px-6">
+          <DrawerHeader>
             <DrawerTitle>Маршрут</DrawerTitle>
-            <DrawerDescription className="text-left">
+            <DrawerDescription>
               Для построения маршрута выберите точки отправления и назначения
             </DrawerDescription>
           </DrawerHeader>
-          <div className="flex flex-col items-center space-y-2 px-6 py-2">
+          <div className="flex flex-col items-center space-y-2 py-2">
             <p
               onClick={handleRepickOrigin}
               className={cn(

@@ -56,7 +56,7 @@ const DrawerSelect = <T extends DrawerSelectOption>({
           >
             {selectedOption?.[displayedProperty] || placeholder}
           </span>
-          <span className="absolute inset-y-0 end-0 flex items-center justify-center px-2">
+          <span className="absolute inset-y-0 inset-e-0 flex items-center justify-center px-2">
             <ChevronDown className="text-muted-foreground size-5" />
           </span>
         </div>
@@ -67,12 +67,12 @@ const DrawerSelect = <T extends DrawerSelectOption>({
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
 
-        <div className="flex flex-col overflow-y-scroll">
+        <div className="flex flex-col space-y-4 overflow-y-scroll">
           {options.map((option) => (
             <label
               id={option.label}
               key={option.label}
-              className="flex items-center space-x-2 px-6 py-2"
+              className="flex items-center space-x-2"
             >
               <Checkbox
                 id={option.label}
@@ -84,7 +84,7 @@ const DrawerSelect = <T extends DrawerSelectOption>({
           ))}
         </div>
 
-        <DrawerFooter>
+        <DrawerFooter className="mt-2">
           <DrawerClose asChild>
             <Button block variant="outline">
               Выбрать

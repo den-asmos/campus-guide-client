@@ -8,7 +8,10 @@ type Props = PropsWithChildren<{
 const Layout = ({ children, className }: Props) => {
   return (
     <main
-      className={cn("bg-background flex w-full flex-1 flex-col p-6", className)}
+      className={cn(
+        "bg-background flex w-full flex-1 flex-col p-6 pb-10",
+        className,
+      )}
     >
       {children}
     </main>

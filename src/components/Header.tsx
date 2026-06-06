@@ -16,7 +16,7 @@ const Header = ({
   rightIcon,
 }: Props) => {
   return (
-    <header className="bg-background sticky top-0 z-50 flex h-17 items-center px-6 shadow">
+    <header className="bg-background sticky top-0 z-50 flex h-15 items-center px-6 shadow">
       <button onClick={onClickLeft} className="flex-1">
         {leftIcon}
       </button>

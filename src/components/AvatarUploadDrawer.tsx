@@ -41,6 +41,7 @@ const AvatarUploadDrawer = ({
 
   const handleSubmit = form.handleSubmit(async (values) => {
     await onSubmit(values.avatar);
+    form.reset();
   });
 
   const handleClose = (open: boolean) => {
@@ -54,13 +55,14 @@ const AvatarUploadDrawer = ({
     <Drawer open={isOpen} onOpenChange={handleClose}>
       <DrawerContent>
         <form>
-          <DrawerHeader className="items-start px-6">
+          <DrawerHeader>
             <DrawerTitle>Аватар</DrawerTitle>
             <DrawerDescription>
               Выберите файл на вашем устройстве
             </DrawerDescription>
           </DrawerHeader>
-          <FieldGroup className="px-6 pt-2">
+
+          <FieldGroup>
             {avatar ? (
               <div className="flex items-center justify-center">
                 <div className="aspect-square w-40 overflow-hidden rounded-full">
@@ -97,28 +99,30 @@ const AvatarUploadDrawer = ({
             )}
           </FieldGroup>
 
-          <DrawerFooter className="pt-2">
-            {avatar && (
-              <DrawerClose asChild>
-                <Button onClick={handleSubmit} block disabled={isLoading}>
-                  {isLoading ? <Loader /> : "Сохранить"}
-                </Button>
-              </DrawerClose>
-            )}
-            {hasUploadedAvatar && (
-              <DrawerClose asChild>
-                <Button
-                  onClick={onDelete}
-                  type="button"
-                  variant="outline"
-                  block
-                  disabled={isLoading}
-                >
-                  {isLoading ? <Loader /> : "Удалить аватар"}
-                </Button>
-              </DrawerClose>
-            )}
-          </DrawerFooter>
+          {(avatar || hasUploadedAvatar) && (
+            <DrawerFooter>
+              {avatar && (
+                <DrawerClose asChild>
+                  <Button onClick={handleSubmit} block disabled={isLoading}>
+                    {isLoading ? <Loader /> : "Сохранить"}
+                  </Button>
+                </DrawerClose>
+              )}
+              {hasUploadedAvatar && (
+                <DrawerClose asChild>
+                  <Button
+                    onClick={onDelete}
+                    type="button"
+                    variant="outline"
+                    block
+                    disabled={isLoading}
+                  >
+                    {isLoading ? <Loader /> : "Удалить аватар"}
+                  </Button>
+                </DrawerClose>
+              )}
+            </DrawerFooter>
+          )}
         </form>
       </DrawerContent>
     </Drawer>
