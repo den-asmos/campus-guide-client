@@ -1,4 +1,4 @@
-# Navigator — Client
+# Campus Guide — Client
 
 React 19 single-page application for the university Campus Guide. Provides indoor navigation, timetable lookup, and classroom search for VSU students.
 
