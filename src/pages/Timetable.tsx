@@ -132,6 +132,8 @@ const Timetable = () => {
           </form>
 
           <div className="flex grow flex-col space-y-4 overflow-y-scroll">
+            {isLoading && <Loader color="primary" />}
+
             {timetableDay.length > 0 &&
               timetableDay.map((lesson, index) => (
                 <TimetableLessonCard key={index} lesson={lesson} variant="sm" />
